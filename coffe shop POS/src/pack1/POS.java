@@ -8,10 +8,21 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class POS extends JFrame {
 
-
+	private void refresh() {
+		int pos=spc;
+		for (int i=0;i<menu.size();i++) {
+			JButton y = new JButton(menu.get(i).name);
+			y.setBounds(pos, 20, btnWidth, 50);
+			contentPane.add(y);
+			pos+=btnWidth+spc;
+			buttons.add(y);
+		}
+	}
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	ArrayList<Menu> menu = new ArrayList<Menu>();
@@ -58,12 +69,29 @@ public class POS extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		String name = "filtered coffe";
+		
+		JButton btnNewButton = new JButton("Admin");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginFrame x = new LoginFrame(menu);
+				x.setVisible(true);
+			}
+		});
+		btnNewButton.setBounds(895, 427, 89, 23);
+		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("refresh");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				refresh();
+			}
+		});
+		btnNewButton_1.setBounds(895, 400, 89, 23);
+		contentPane.add(btnNewButton_1);
 
 		int pos=spc;
-		for (int i=0;i<6;i++) {
-			JButton y = new JButton(name);
-			y.setActionCommand(name);
+		for (int i=0;i<menu.size();i++) {
+			JButton y = new JButton(menu.get(i).name);
 			y.setBounds(pos, 20, btnWidth, 50);
 			contentPane.add(y);
 			pos+=btnWidth+spc;
