@@ -11,7 +11,9 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class LoginFrame extends JFrame {
 
@@ -19,6 +21,7 @@ public class LoginFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField textUser;
 	private JTextField textPassword;
+	private JPasswordField passwordField;
 
 	/**
 	 * Launch the application.
@@ -27,7 +30,7 @@ public class LoginFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoginFrame frame = new LoginFrame();
+					LoginFrame frame = new LoginFrame(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,8 +41,9 @@ public class LoginFrame extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param menu 
 	 */
-	public LoginFrame() {
+	public LoginFrame(ArrayList<Menu> menu) {
 		setResizable(false);
 		Admin admin = new Admin("admin", "1234");
 		
@@ -68,7 +72,7 @@ public class LoginFrame extends JFrame {
 		contentPane.add(textUser);
 		textUser.setColumns(10);
 		
-		textPassword = new JTextField();
+		textPassword = new JPasswordField();
 		textPassword.setColumns(10);
 		textPassword.setBounds(196, 77, 133, 20);
 		contentPane.add(textPassword);
@@ -81,8 +85,9 @@ public class LoginFrame extends JFrame {
 				String password = textPassword.getText();
 				
 				if(admin.username.equals(username)&&admin.password.equals(password)) {
-					ManagmentFrame managment = new ManagmentFrame();
+					ManagmentFrame managment = new ManagmentFrame(menu);
 					managment.setVisible(true);
+					dispose();
 				}
 				else {
 					JOptionPane.showMessageDialog(contentPane, "Login Failed!");
@@ -104,5 +109,6 @@ public class LoginFrame extends JFrame {
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnBack.setBounds(172, 191, 85, 21);
 		contentPane.add(btnBack);
+		
 	}
 }
