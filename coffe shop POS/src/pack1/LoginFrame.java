@@ -45,9 +45,7 @@ public class LoginFrame extends JFrame {
 	public LoginFrame(ArrayList<Menu> menu) {
 		setResizable(false);
 		Admin admin = new Admin("admin", "1234");
-		
-		//hello
-		
+				
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
