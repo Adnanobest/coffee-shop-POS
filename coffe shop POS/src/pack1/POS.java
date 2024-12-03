@@ -12,23 +12,36 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class POS extends JFrame {
-
-	private void refresh() {
+	
+	static void add(String name) {
+		buttons.add(new JButton(name));
+		reset();
+	}
+	
+	static void reset() {
 		int pos=spc;
-		for (int i=0;i<menu.size();i++) {
-			JButton y = new JButton(menu.get(i).name);
-			y.setBounds(pos, 20, btnWidth, 50);
-			contentPane.add(y);
+		int i=0;
+		height=20;
+		for (JButton x : buttons) {
+			if(i!=0 && i%6 == 0) {
+				pos=spc;
+				height+=70;
+			} i++;
+			contentPane.add(x);
+			x.setBounds(pos, height, btnWidth, 50);
 			pos+=btnWidth+spc;
-			buttons.add(y);
 		}
+		
 	}
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	ArrayList<Menu> menu = new ArrayList<Menu>();
-	ArrayList<JButton> buttons = new ArrayList<JButton>();
-	int btnWidth=125, spc=35;
-	//Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	private static JPanel contentPane;
+	static ArrayList<Menu> menu = new ArrayList<Menu>();
+	static ArrayList<JButton> buttons = new ArrayList<JButton>();
+	static int btnWidth=125;
+	JButton btnAdmin;
+	JButton btnRefresh;
+	static int spc=35;
+	static int height= 5;
 
 		public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -54,54 +67,42 @@ public class POS extends JFrame {
 				btnWidth= (int) (dim.getWidth()/8);
 				spc = (int) (dim.getWidth()/28.5);
 				int pos=spc;
+				btnAdmin.setBounds(dim.width-btnWidth-10, dim.height-35, btnWidth, 25);
+				int i=0;
+				height=20;
 				for (JButton x : buttons) {
-					x.setBounds(pos, 20, btnWidth, 50);
+					if(i!=0 && i%6 == 0) {
+						pos=spc;
+						height+=70;
+					} i++;
+					contentPane.add(x);
+					x.setBounds(pos, height, btnWidth, 50);
 					pos+=btnWidth+spc;
 				}
+				
 			}
 		});
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		setBounds(100, 100, 1000, 500);
+		setMinimumSize(new Dimension(1000, 500));
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnNewButton = new JButton("Admin");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnAdmin = new JButton("Admin");
+		btnAdmin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LoginFrame x = new LoginFrame(menu);
 				x.setVisible(true);
 			}
 		});
-		btnNewButton.setBounds(895, 427, 89, 23);
-		contentPane.add(btnNewButton);
+		btnAdmin.setBounds(895, 427, btnWidth, 25);
+		contentPane.add(btnAdmin);
 		
-		JButton btnNewButton_1 = new JButton("refresh");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				refresh();
-			}
-		});
-		btnNewButton_1.setBounds(895, 400, 89, 23);
-		contentPane.add(btnNewButton_1);
 
-		int pos=spc;
-		for (int i=0;i<menu.size();i++) {
-			JButton y = new JButton(menu.get(i).name);
-			y.setBounds(pos, 20, btnWidth, 50);
-			contentPane.add(y);
-			pos+=btnWidth+spc;
-			buttons.add(y);
-		}
-		
-		/*
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(pos, 20, btnWidth, 50);
-		contentPane.add(btnNewButton);
-		*/
 	}
 }

@@ -73,6 +73,7 @@ public class ManagmentFrame extends JFrame {
 				String name=txtDrinkName.getText();
 				int price = Integer.parseInt(txtPrice.getText());
 				menu.add(new Menu(name,price));
+				POS.add(name);
 			}
 		});
 		btnNewButton.setBounds(178, 91, 118, 28);

@@ -20,7 +20,7 @@ public class LoginFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textUser;
-	private JTextField textPassword;
+	private JPasswordField textPassword;
 
 	/**
 	 * Launch the application.
@@ -44,8 +44,8 @@ public class LoginFrame extends JFrame {
 	 */
 	public LoginFrame(ArrayList<Menu> menu) {
 		setResizable(false);
-		Admin admin = new Admin("admin", "1234");
-				
+		Admin admin = new Admin("", "");
+		
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -81,6 +81,7 @@ public class LoginFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				String username = textUser.getText();
+				@SuppressWarnings("deprecation")
 				String password = textPassword.getText();
 				
 				if(admin.username.equals(username)&&admin.password.equals(password)) {
