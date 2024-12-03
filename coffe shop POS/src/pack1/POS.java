@@ -13,7 +13,7 @@ import java.awt.event.ActionEvent;
 
 public class POS extends JFrame {
 	
-	static void add(String name) {
+	static void ad(String name) {
 		buttons.add(new JButton(name));
 		reset();
 	}
