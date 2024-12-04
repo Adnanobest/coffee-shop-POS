@@ -35,7 +35,9 @@ public class POS extends JFrame {
 	}
 	private static final long serialVersionUID = 1L;
 	private static JPanel contentPane;
-	static ArrayList<Menu> menu = new ArrayList<Menu>();
+	
+	static ArrayList<Drink> menuDrink = new ArrayList<Drink>();
+	static ArrayList<Dessert> menuDessert = new ArrayList<Dessert>();
 	static ArrayList<JButton> buttons = new ArrayList<JButton>();
 	static int btnWidth=125;
 	JButton btnAdmin;
@@ -96,7 +98,7 @@ public class POS extends JFrame {
 		btnAdmin = new JButton("Admin");
 		btnAdmin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LoginFrame x = new LoginFrame(menu);
+				LoginFrame x = new LoginFrame(menuDrink, menuDessert);
 				x.setVisible(true);
 			}
 		});

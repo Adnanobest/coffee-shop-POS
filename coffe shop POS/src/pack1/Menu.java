@@ -10,7 +10,7 @@ public class Menu {
 	
 	protected static int drinkSize(String size) {
 		switch (size) {
-		case "S": 
+		case "S":
 			return 350;
 		case "M":
 			return 475;

@@ -1,6 +1,7 @@
 package pack1;
 
 import java.awt.EventQueue;
+//import java.awt.Image;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -9,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.MatteBorder;
 import java.awt.Color;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class ManagmentFrame extends JFrame {
 
@@ -30,7 +33,9 @@ public class ManagmentFrame extends JFrame {
 	private JTextField txtPrice;
 	private JTextField txtDessertName;
 	private JTextField txtDessertPrice;
-
+	private JLayeredPane addPane;
+	private JLayeredPane addDessertPane;	
+	private JLayeredPane addDrinkPane;
 	/**
 	 * Launch the application.
 	 */
@@ -38,7 +43,7 @@ public class ManagmentFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ManagmentFrame frame = new ManagmentFrame(null);
+					ManagmentFrame frame = new ManagmentFrame(null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,50 +56,71 @@ public class ManagmentFrame extends JFrame {
 	 * Create the frame.
 	 * @param menu 
 	 */
-	public ManagmentFrame(ArrayList<Menu> menu) {
+	public ManagmentFrame(ArrayList<Drink> drinks, ArrayList<Dessert> desserts) {
 		setTitle("Management");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
+		contentPane.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				addPane.setBounds(0, 0,contentPane.getWidth()/5, contentPane.getHeight());
+				addDrinkPane.setBounds(contentPane.getWidth()/5, 0
+						,(int) (contentPane.getWidth()/2.5), contentPane.getHeight());
+				addDessertPane.setBounds(contentPane.getWidth()/5, 0
+						,(int) (contentPane.getWidth()/2.5), contentPane.getHeight());
+				
+				
+			}
+		});
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLayeredPane addDrinkPane = new JLayeredPane();
+		addDrinkPane = new JLayeredPane();
 		addDrinkPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		addDrinkPane.setBounds(118, 0, 199, 261);
+		addDrinkPane.setBounds(90, 0, 180, 300);
 		contentPane.add(addDrinkPane);
 		addDrinkPane.setVisible(false);
 		
-		JLayeredPane addDessertPane = new JLayeredPane();
+		addDessertPane = new JLayeredPane();
 		addDessertPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		addDessertPane.setBounds(118, 0, 199, 261);
+		addDessertPane.setBounds(90, 0, 180, (contentPane.getHeight()));
 		contentPane.add(addDessertPane);
 		addDessertPane.setVisible(false);
 
+		addPane = new JLayeredPane();
+		addPane.setBounds(0, 0,90,261);
+		contentPane.add(addPane);
+		
 		JButton btnAddDrink = new JButton("add drink");
+		btnAddDrink.setBounds(5, 5,(int) (addPane.getSize().getWidth() -10), (int) (addPane.getSize().getHeight()/10) );
+		addPane.add(btnAddDrink);
 		btnAddDrink.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addDessertPane.setVisible(false);
 				addDrinkPane.setVisible(true);
 			}
 		});
-		btnAddDrink.setBounds(0, 11, 118, 28);
-		contentPane.add(btnAddDrink);
 		
 		JButton btnAddDessert = new JButton("add dessert");
+		btnAddDessert.setBounds(5, 50,(int) (addPane.getSize().getWidth() -10), 10);
+		addPane.add(btnAddDessert);
 		btnAddDessert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addDrinkPane.setVisible(false);
 				addDessertPane.setVisible(true);
 			}
 		});
-		btnAddDessert.setBounds(0, 44, 118, 28);
-		contentPane.add(btnAddDessert);
+
+	/*	ImageIcon icon = new ImageIcon(new ImageIcon("pics/coffee.jpg").getImage().getScaledInstance(118, 28, Image.SCALE_DEFAULT));
+		JLabel label= new JLabel(new ImageIcon(new ImageIcon("pics/coffee.jpg").getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
+		contentPane.add(label);
+		label.setBounds(100, 100, 150, 150); */
 
 
-		JLabel lblDessertName = new JLabel("Dessert%nname");
+		JLabel lblDessertName = new JLabel("Dessert name");
 		lblDessertName.setBounds(10, 14, 62, 14);
 		addDessertPane.add(lblDessertName);
 		
@@ -118,10 +144,10 @@ public class ManagmentFrame extends JFrame {
 
 		btnSaveDessert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!isAllInt(txtDessertPrice.getText())) {
+				if(isAllInt(txtDessertPrice.getText())) {
 					String name=txtDessertName.getText();
 					int price = Integer.parseInt(txtDessertPrice.getText());
-					menu.add(new Menu(name,price));
+					desserts.add(new Dessert(name,price));
 					POS.ad(name);
 					txtDessertName.setText("");
 					txtDessertPrice.setText("");
@@ -147,40 +173,45 @@ public class ManagmentFrame extends JFrame {
 		addDrinkPane.add(txtPrice);
 		txtPrice.setColumns(10);
 		
-		JLabel lblSize = new JLabel("Available Sizes");
+		JLabel lblSize = new JLabel("Hot or cold");
 		lblSize.setBounds(10, 68, 76, 14);
 		addDrinkPane.add(lblSize);
 		
+		JCheckBox chckbxHot = new JCheckBox("Hot");
+		chckbxHot.setBounds(82, 64, 38, 23);
+		addDrinkPane.add(chckbxHot);
+		chckbxHot.setActionCommand("H");
+		
+		JCheckBox chckbxCold = new JCheckBox("Cold");
+		chckbxCold.setBounds(82, 89, 38, 23);
+		addDrinkPane.add(chckbxCold);
+
 		JButton btnSaveDrink = new JButton("Save Drink");
 		btnSaveDrink.setBounds(44, 222, 118, 28);
 		addDrinkPane.add(btnSaveDrink);
-
-		ArrayList<JCheckBox> sizes = new ArrayList<JCheckBox>();
-		
-		JCheckBox chckbxS = new JCheckBox("S");
-		chckbxS.setBounds(82, 64, 38, 23);
-		addDrinkPane.add(chckbxS);
-		sizes.add(chckbxS);
-		
-		JCheckBox chckbxM = new JCheckBox("M");
-		chckbxM.setBounds(82, 89, 38, 23);
-		addDrinkPane.add(chckbxM);
-		sizes.add(chckbxM);
-		
-		JCheckBox chckbxL = new JCheckBox("L");
-		chckbxL.setBounds(82, 115, 38, 23);
-		addDrinkPane.add(chckbxL);
-		sizes.add(chckbxL);
-				
 		btnSaveDrink.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!isAllInt(txtPrice.getText())) {
+				if(isAllInt(txtPrice.getText()) &&
+						(chckbxHot.isSelected() || chckbxCold.isSelected()) ) {
 					String name=txtDrinkName.getText();
 					int price = Integer.parseInt(txtPrice.getText());
-					menu.add(new Menu(name,price));
+					String horc="";
+					if (chckbxHot.isSelected()) {
+						horc+="H"+" ";
+					}if (chckbxCold.isSelected()) {
+						horc+="C";
+					}
+					
+					drinks.add(new Drink(name,price,horc));
 					POS.ad(name);
+					JOptionPane.showMessageDialog(contentPane, drinks.getLast().name+" Saved with price "
+							+drinks.getLast().price+" with available sizes "+ horc);
 					txtDrinkName.setText("");
 					txtPrice.setText("");
+					chckbxHot.setSelected(false);
+					chckbxCold.setSelected(false);
+				}else {
+					JOptionPane.showMessageDialog(contentPane, "you must select either hot, cold or both");
 				}
 			}
 		});
