@@ -5,18 +5,13 @@ public class Menu {
 		this.name = name;
 		this.price = price;
 	}
-	String name;
-	double price;
+	public String name;
+	private double price;
 	
-	protected static int drinkSize(String size) {
-		switch (size) {
-		case "S":
-			return 350;
-		case "M":
-			return 475;
-		case "L":
-			return 600;
-		}
-		return -1;
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
 	}
 }
