@@ -245,28 +245,29 @@ public class ManagmentFrame extends JFrame {
 		addDrinkPane.add(btnSaveDrink);
 		btnSaveDrink.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(isNum(txtPrice.getText()) &&
-						(chckbxHot.isSelected() || chckbxCold.isSelected()) ) {
-					String name=txtDrinkName.getText();
-					Double price = Double.parseDouble(txtPrice.getText());
-					String horc="";
-					if (chckbxHot.isSelected()) {
-						horc+="H"+" ";
-					}if (chckbxCold.isSelected()) {
-						horc+="C";
-					}
+				if(isNum(txtPrice.getText())) {
+					if (chckbxHot.isSelected() || chckbxCold.isSelected()) {
+						String name=txtDrinkName.getText();
+						Double price = Double.parseDouble(txtPrice.getText());
+						String horc="";
+						if (chckbxHot.isSelected()) {
+							horc+="H"+" ";
+						}if (chckbxCold.isSelected()) {
+							horc+="C";
+						}
 					
-					drinks.add(new Drink(name,price,horc));
-					POS.ad(name);
-					JOptionPane.showMessageDialog(contentPane, drinks.getLast().name+" Saved with price "
-							+drinks.getLast().getPrice()+" with "+ horc +"available");
-					refresh(drinks, desserts);
-					txtDrinkName.setText("");
-					txtPrice.setText("");
-					chckbxHot.setSelected(false);
-					chckbxCold.setSelected(false);
-				}else {
+						drinks.add(new Drink(name,price,horc));
+						POS.ad(name);
+						JOptionPane.showMessageDialog(contentPane, drinks.getLast().name+" Saved with price "
+								+drinks.getLast().getPrice()+" with "+ horc +"available");
+						refresh(drinks, desserts);
+						txtDrinkName.setText("");
+						txtPrice.setText("");
+						chckbxHot.setSelected(false);
+						chckbxCold.setSelected(false);
+					}else {
 					JOptionPane.showMessageDialog(contentPane, "you must select either hot, cold or both");
+					}
 				}
 			}
 		});
@@ -317,12 +318,12 @@ public class ManagmentFrame extends JFrame {
 
 
 	private void remove(ArrayList<Drink> drinks, ArrayList<Dessert> desserts, JList<String> list) {
-		if (!list.getSelectedValue().isBlank()) {
+		if (!list.isSelectionEmpty()) {
 			if (list.getSelectedIndex()>drinks.size()) {
-				for (Drink x : drinks) {
-					if (x.name.equals(list.getSelectedValue())) {
+				for (int i=0;i < drinks.size();i++) {
+					if (drinks.get(i).name.equals(list.getSelectedValue())) {
 						JOptionPane.showMessageDialog(contentPane, list.getSelectedValue()+" deleted");
-						drinks.remove(x);
+						drinks.remove(i);
 						return;
 					}
 				}
@@ -338,7 +339,9 @@ public class ManagmentFrame extends JFrame {
 		}
 	}
 
+
 }
+
 
 		
 /*
