@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
@@ -61,8 +59,7 @@ public class POS extends JFrame {
 	JButton btnRefresh;
 	static int spc=24;
 	static int height= 5;
-	private JButton btnClear;
-
+	
 		public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -134,24 +131,8 @@ public class POS extends JFrame {
 			}
 		});
 		totalPanel.add(btnAdmin);
-		
-		btnClear = new JButton("clear");
-		btnClear.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				clearAll();
-			}
-		});
-		btnClear.setBounds(71, 182, 89, 23);
-		totalPanel.add(btnClear);
 
 		
 
-	}
-
-	private void clearAll() {
-		for (int i=0;i<buttons.size();i++) {
-			menuPane.remove(i);
-
-		}
 	}
 }
