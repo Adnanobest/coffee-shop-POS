@@ -220,7 +220,7 @@ public class ManagmentFrame extends JFrame {
 						}
 					
 						drinks.add(new Drink(name,price,horc));
-						POS.ad(name);
+						POS.adDrink(name);
 						JOptionPane.showMessageDialog(contentPane, drinks.getLast().name+" Saved with price "
 								+drinks.getLast().getPrice()+" with "+ horc +"available");
 						refresh(drinks, desserts);
@@ -268,7 +268,7 @@ public class ManagmentFrame extends JFrame {
 					String name=txtDessertName.getText();
 					Double price = Double.parseDouble(txtDessertPrice.getText());
 					desserts.add(new Dessert(name,price));
-					POS.ad(name);
+					POS.adDesserts(name);
 					JOptionPane.showMessageDialog(contentPane, desserts.getLast().name+" Saved with price "
 							+desserts.getLast().getPrice());
 					refresh(drinks, desserts);
@@ -287,7 +287,7 @@ public class ManagmentFrame extends JFrame {
 					if (x.name.equals(list.getSelectedValue().split(",")[0])) {
 						JOptionPane.showMessageDialog(contentPane, list.getSelectedValue()+" deleted");
 						drinks.remove(x);
-						POS.removeButton(list.getSelectedValue().split(",")[0]);
+						POS.removeButton(list.getSelectedValue().split(",")[0],0);
 						return;
 					}
 				}
@@ -296,7 +296,7 @@ public class ManagmentFrame extends JFrame {
 					if (x.name.equals(list.getSelectedValue().split(",")[0])) {
 						JOptionPane.showMessageDialog(contentPane, list.getSelectedValue()+" deleted");
 						desserts.remove(x);
-						POS.removeButton(list.getSelectedValue().split(",")[0]);
+						POS.removeButton(list.getSelectedValue().split(",")[0],1);
 						return;
 					}
 				}
