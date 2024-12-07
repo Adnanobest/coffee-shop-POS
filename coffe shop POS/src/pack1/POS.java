@@ -15,12 +15,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
-<<<<<<< HEAD
-=======
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Color;
->>>>>>> d846041253f03831615f06a110de9c1d2e0747f6
 
 public class POS extends JFrame {
 	
@@ -111,11 +105,7 @@ public class POS extends JFrame {
 	JButton btnRefresh;
 	static int spc=24;
 	static int height= 5;
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> d846041253f03831615f06a110de9c1d2e0747f6
 		public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -187,7 +177,6 @@ public class POS extends JFrame {
 		});
 		totalPanel.setLayout(null);
 		totalPanel.add(btnAdmin);
-<<<<<<< HEAD
 	}
 
 	private void setPanel() {
@@ -200,9 +189,6 @@ public class POS extends JFrame {
 		});
 		btnDrinks.setBounds(10, 11, 89, 23);
 		panel.add(btnDrinks);
-=======
-
->>>>>>> d846041253f03831615f06a110de9c1d2e0747f6
 		
 		JButton btnDesserts = new JButton("Desserts");
 		btnDesserts.addActionListener(new ActionListener() {
@@ -214,7 +200,6 @@ public class POS extends JFrame {
 		btnDesserts.setBounds(10, 45, 89, 23);
 		panel.add(btnDesserts);
 	}
-<<<<<<< HEAD
 
 	private void setDrinksPane() {
 		JLabel lblHorC = new JLabel("Hot or cold");
@@ -254,6 +239,4 @@ public class POS extends JFrame {
 		drinksPanel.add(rdbtnS);
 		btngrpSize.add(rdbtnS);
 	}
-=======
->>>>>>> d846041253f03831615f06a110de9c1d2e0747f6
 }
