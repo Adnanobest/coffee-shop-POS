@@ -112,7 +112,7 @@ public class ManagmentFrame extends JFrame {
 			JLayeredPane addDessertPane, JLayeredPane addPane) {
 		JButton btnAddDrink = new JButton("add drink");
 		btnAddDrink.setFont(font);
-		btnAddDrink.setBounds(5, 11,128, 42 );
+		btnAddDrink.setBounds(5, 103,128, 42 );
 		addPane.add(btnAddDrink);
 		btnAddDrink.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -123,18 +123,8 @@ public class ManagmentFrame extends JFrame {
 		
 		JButton btnAddDessert = new JButton("add dessert");
 		btnAddDessert.setFont(font);
-		btnAddDessert.setBounds(5, 65,128, 42 );
+		btnAddDessert.setBounds(5, 161,128, 42 );
 		addPane.add(btnAddDessert);
-		
-		JButton btnRefreshList = new JButton("Refresh List");
-		btnRefreshList.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				refresh(drinks, desserts);
-			}
-		});
-		btnRefreshList.setFont(font);
-		btnRefreshList.setBounds(5, 119, 128, 42);
-		addPane.add(btnRefreshList);
 		btnAddDessert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addDrinkPane.setVisible(false);
