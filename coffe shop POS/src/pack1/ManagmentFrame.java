@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.border.MatteBorder;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.ScrollPane;
 
 public class ManagmentFrame extends JFrame {
 
@@ -135,8 +137,12 @@ public class ManagmentFrame extends JFrame {
 	
 	private void listPane(ArrayList<Drink> drinks, ArrayList<Dessert> desserts, JLayeredPane listPane) {
 		list = new JList<String>(listModel);
-		list.setBounds(0, 0, 207, 249);
-		listPane.add(list);
+		JScrollPane scrol = new JScrollPane(list
+				, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
+				, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrol.setBounds(0, 0, 207, 249);
+		
+		listPane.add(scrol);
 		
 		JLabel lblSelected = new JLabel("for selected item:");
 		lblSelected.setBounds(5, 255, 101, 16);
@@ -162,7 +168,9 @@ public class ManagmentFrame extends JFrame {
 		});
 		btnChangePrice.setFont(font);
 		btnChangePrice.setBounds(5, 269, 96, 42);
-		listPane.add(btnChangePrice);	
+		listPane.add(btnChangePrice);
+
+		refresh(drinks, desserts);
 	}
 
 	private void addDrinkPane(ArrayList<Drink> drinks, ArrayList<Dessert> desserts, JLayeredPane addDrinkPane) {
@@ -195,6 +203,7 @@ public class ManagmentFrame extends JFrame {
 		chckbxHot.setFont(font);
 		chckbxHot.setBounds(53, 166, 45, 25);
 		addDrinkPane.add(chckbxHot);
+		chckbxHot.setMnemonic(KeyEvent.VK_H);
 		chckbxHot.setActionCommand("H");
 		
 		JCheckBox chckbxCold = new JCheckBox("Cold");
@@ -219,8 +228,7 @@ public class ManagmentFrame extends JFrame {
 							horc+="C";
 						}
 					
-						drinks.add(new Drink(name,price,horc));
-						POS.adDrink(name);
+						POS.addDrink(name, price, horc);
 						JOptionPane.showMessageDialog(contentPane, drinks.getLast().name+" Saved with price "
 								+drinks.getLast().getPrice()+" with "+ horc +" available");
 						refresh(drinks, desserts);
@@ -267,10 +275,9 @@ public class ManagmentFrame extends JFrame {
 				if(isNum(txtDessertPrice.getText())) {
 					String name=txtDessertName.getText();
 					Double price = Double.parseDouble(txtDessertPrice.getText());
-					desserts.add(new Dessert(name,price));
-					POS.adDesserts(name);
-					JOptionPane.showMessageDialog(contentPane, desserts.getLast().name+" Saved with price "
-							+desserts.getLast().getPrice());
+					POS.addDesserts(name, price);
+					JOptionPane.showMessageDialog(contentPane, name+" Saved with price "
+							+price);
 					refresh(drinks, desserts);
 					txtDessertName.setText("");
 					txtDessertPrice.setText("");
