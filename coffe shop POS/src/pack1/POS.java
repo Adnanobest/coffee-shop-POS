@@ -47,6 +47,20 @@ public class POS extends JFrame {
 	static void resetDrinks() {
 		drinksPanel.removeAll();
 		drinksPanel.repaint();
+
+		drinksPanel.add(lblHorC);
+		drinksPanel.add(rdbtnHot);
+		btngrpHorC.add(rdbtnHot);
+		drinksPanel.add(rdbtnCold);
+		btngrpHorC.add(rdbtnCold);
+		drinksPanel.add(lblSize);
+		drinksPanel.add(rdbtnL);
+		btngrpSize.add(rdbtnL);
+		drinksPanel.add(rdbtnM);
+		btngrpSize.add(rdbtnM);
+		drinksPanel.add(rdbtnS);
+		btngrpSize.add(rdbtnS);
+
 		if (drinkButtons.isEmpty()) {
 			return;
 		}
@@ -96,6 +110,15 @@ public class POS extends JFrame {
 	private static JPanel dessertsPanel;
 	private static JPanel totalPanel;
 	private static JScrollPane scroll;
+	private static JLabel lblHorC;
+	private static ButtonGroup btngrpHorC;
+	private static JRadioButton rdbtnHot;
+	private static JRadioButton rdbtnCold;
+	private static JLabel lblSize;
+	private static ButtonGroup btngrpSize;
+	private static JRadioButton rdbtnL;
+	private static JRadioButton rdbtnM;
+	private static JRadioButton rdbtnS;
 	
 	static ArrayList<Drink> menuDrink = new ArrayList<Drink>();
 	static ArrayList<Dessert> menuDessert = new ArrayList<Dessert>();
@@ -124,7 +147,6 @@ public class POS extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
-
 		setBounds(100, 100, 1015, 500);
 		setMinimumSize(new Dimension(999, 500));
 		contentPane = new JPanel();
@@ -202,39 +224,39 @@ public class POS extends JFrame {
 	}
 
 	private void setDrinksPane() {
-		JLabel lblHorC = new JLabel("Hot or cold");
+		lblHorC = new JLabel("Hot or cold");
 		lblHorC.setBounds(10,11,52,14);
 		drinksPanel.add(lblHorC);
 		
-		ButtonGroup btngrpHorC = new ButtonGroup();
+		btngrpHorC = new ButtonGroup();
 		
-		JRadioButton rdbtnHot = new JRadioButton("Hot");
+		rdbtnHot = new JRadioButton("Hot");
 		rdbtnHot.setBounds(69, 7, 43, 23);
 		drinksPanel.add(rdbtnHot);
 		btngrpHorC.add(rdbtnHot);
 		
-		JRadioButton rdbtnCold = new JRadioButton("Cold");
+		rdbtnCold = new JRadioButton("Cold");
 		rdbtnCold.setBounds(114, 7, 47, 23);
 		drinksPanel.add(rdbtnCold);
 		btngrpHorC.add(rdbtnCold);
 		
-		JLabel lblSize = new JLabel("Size");
+		lblSize = new JLabel("Size");
 		lblSize.setBounds(10, 36, 52, 14);
 		drinksPanel.add(lblSize);
 		
-		ButtonGroup btngrpSize = new ButtonGroup();
+		btngrpSize = new ButtonGroup();
 		
-		JRadioButton rdbtnL = new JRadioButton("L");
+		rdbtnL = new JRadioButton("L");
 		rdbtnL.setBounds(69, 32, 43, 23);
 		drinksPanel.add(rdbtnL);
 		btngrpSize.add(rdbtnL);
 		
-		JRadioButton rdbtnM = new JRadioButton("M");
+		rdbtnM = new JRadioButton("M");
 		rdbtnM.setBounds(114, 32, 47, 23);
 		drinksPanel.add(rdbtnM);
 		btngrpSize.add(rdbtnM);
 		
-		JRadioButton rdbtnS = new JRadioButton("S");
+		rdbtnS = new JRadioButton("S");
 		rdbtnS.setBounds(163, 32, 47, 23);
 		drinksPanel.add(rdbtnS);
 		btngrpSize.add(rdbtnS);

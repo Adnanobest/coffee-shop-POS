@@ -162,7 +162,9 @@ public class ManagmentFrame extends JFrame {
 		});
 		btnChangePrice.setFont(font);
 		btnChangePrice.setBounds(5, 269, 96, 42);
-		listPane.add(btnChangePrice);	
+		listPane.add(btnChangePrice);
+
+		refresh(drinks, desserts);
 	}
 
 	private void addDrinkPane(ArrayList<Drink> drinks, ArrayList<Dessert> desserts, JLayeredPane addDrinkPane) {
