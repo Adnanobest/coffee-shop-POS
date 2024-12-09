@@ -318,8 +318,13 @@ public class POS extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				double paid = Double.parseDouble(textPaid.getText());
-				double reminder = paid - total;
-				lblReminder.setText("Reminder: "+reminder);
+				if(paid<total) {
+					JOptionPane.showMessageDialog(contentPane, "The paid amount is less than the total!");
+					textPaid.setText("");
+				}else {
+					double reminder = paid - total;
+					lblReminder.setText("Reminder: "+reminder);
+				}
 			}
 		});
 		btnCalculate.setBounds(197, 354, 100, 32);
