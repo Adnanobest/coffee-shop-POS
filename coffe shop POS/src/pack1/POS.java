@@ -15,7 +15,7 @@ import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 
 public class POS extends JFrame {
-	
+	static JLabel lblTotal;
 	static double total=0;
 	static void removeButton(String x, int z) {
 		if (z==0) {
@@ -38,8 +38,22 @@ public class POS extends JFrame {
 	}
 	
 	static void adDrink(String name) {
-		drinkButtons.add(new JButton(name));
-		resetDrinks();
+		JButton button = new JButton(name);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					
+					String drink = button.getActionCommand().toString();
+					
+					for (Drink d : menuDrink) {
+						if(d.name.equals(drink)) {
+							total += d.getPrice();
+							lblTotal.setText(Double.toString(total));
+						}
+					}
+				}
+			});
+			drinkButtons.add(button);
+			resetDrinks();
 	}
 	
 	static void resetDrinks() {
@@ -203,6 +217,10 @@ public class POS extends JFrame {
 		});
 		totalPanel.setLayout(null);
 		totalPanel.add(btnAdmin);
+		
+		lblTotal = new JLabel(Double.toString(total));
+		lblTotal.setBounds(122, 391, 61, 23);
+		totalPanel.add(lblTotal);
 	}
 	
 	private void setPanel() {
@@ -266,22 +284,5 @@ public class POS extends JFrame {
 		drinksPanel.add(rdbtnS);
 		btngrpSize.add(rdbtnS);
 		
-		JLabel lblTotal = new JLabel(Double.toString(total));
-		lblTotal.setBounds(149, 145, 61, 23);
-		drinksPanel.add(lblTotal);
-		for (JButton button : drinkButtons) {
-			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					String drink = button.getActionCommand().toString();
-					
-					for (Drink d : menuDrink) {
-						if(d.name.equals(drink)) {
-							total += d.getPrice();
-						}
-					}
-				}
-			});
-		}
 	}
 }
