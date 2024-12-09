@@ -136,6 +136,8 @@ public class POS extends JFrame {
 	static void resetDesserts() {
 		dessertsPanel.removeAll();
 		dessertsPanel.repaint();
+		dessertsPanel.add(btnAddDessertToCart);
+		
 		if (dessertButtons.isEmpty()) {
 			return;
 		}
