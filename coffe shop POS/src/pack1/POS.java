@@ -56,15 +56,7 @@ public class POS extends JFrame {
 			}
 		};
 	}
-	
-//	static ActionListener drinkBtnActionListener(Drink drink) {
-//		return new ActionListener() {
-//			public void actionPerformed(ActionEvent e) { 
-//				
-//			}
-//		};
-//	}
-	
+
 	static void removeButton(String x, int z) {
 		if (z==0) {
 			for (JButton y : drinkButtons) {
@@ -131,7 +123,11 @@ public class POS extends JFrame {
 		desserts.add(new Dessert(name,price));
 
 		JButton dessert = new JButton(name);
-		
+		dessert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectedButton=dessert;
+			}
+		});
 		
 		dessertButtons.add(dessert);
 		resetDesserts();
@@ -256,14 +252,21 @@ public class POS extends JFrame {
 		btnAddDessertToCart = new JButton("add to cart");
 		btnAddDessertToCart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int i=0;
-				for (JButton button : dessertButtons) {
-					if (button.isSelected()) {
-						total += Double.parseDouble(button.getActionCommand());
-						cart.add(desserts.get(i));
-					}
-					i++;
+				if (selectedButton == null) {
+					JOptionPane.showMessageDialog(contentPane, "you have to select a dessert first");
+					return;
 				}
+				for (Dessert dessert : desserts) {
+					if (dessert.name.equals(selectedButton.getText())) {
+						total +=dessert.getPrice();
+						listModel.addElement(dessert.name +", "+ dessert.getPrice());
+						lblTotal.setText("Total: "+ Double.toString(total));
+						list.setModel(listModel);
+						selectedButton = null;
+						return;
+					}
+				}
+				
 			}
 		});
 		btnAddDessertToCart.setBounds(235, 5, 85, 23);
@@ -367,10 +370,10 @@ public class POS extends JFrame {
 		btnAddDrinkToCart = new JButton("add to cart");
 		btnAddDrinkToCart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (selectedButton.equals(null)) {
+				if (selectedButton == null) {
 					JOptionPane.showMessageDialog(contentPane, "you have to select a drink first");
 					return;
-				}else if (btngrpHorC.getSelection().equals(null) || btngrpSize.getSelection().equals(null)) {
+				}else if (btngrpHorC.getSelection()== null || btngrpSize.getSelection()==null) {
 					JOptionPane.showMessageDialog(contentPane, "you have to select hot or cold and a size");
 					return;
 				}
