@@ -19,6 +19,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JList;
 import java.awt.Color;
+import javax.swing.JTextField;
 
 public class POS extends JFrame {
 	
@@ -188,6 +189,10 @@ public class POS extends JFrame {
 	private static JButton btnAddDessertToCart;
 	private static JButton btnAddDrinkToCart;
 	private DefaultListModel<String> listModel= new DefaultListModel<>();
+	private JLabel lblPaid;
+	private JTextField textPaid;
+	private JButton btnCalculate;
+	private JLabel lblReminder;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -292,8 +297,35 @@ public class POS extends JFrame {
 		totalPanel.add(btnAdmin);
 		
 		lblTotal = new JLabel("Total: 0");
-		lblTotal.setBounds(66, 383, 46, 14);
+		lblTotal.setBounds(41, 340, 100, 14);
 		totalPanel.add(lblTotal);
+		
+		lblPaid = new JLabel("Paid:");
+		lblPaid.setBounds(41, 364, 45, 13);
+		totalPanel.add(lblPaid);
+		
+		textPaid = new JTextField();
+		textPaid.setBounds(73, 361, 96, 19);
+		totalPanel.add(textPaid);
+		textPaid.setColumns(10);
+		
+		lblReminder = new JLabel("Reminder:");
+		lblReminder.setBounds(41, 400, 128, 13);
+		totalPanel.add(lblReminder);
+		
+		btnCalculate = new JButton("Calculate");
+		btnCalculate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				double paid = Double.parseDouble(textPaid.getText());
+				double reminder = paid - total;
+				lblReminder.setText("Reminder: "+reminder);
+			}
+		});
+		btnCalculate.setBounds(197, 354, 100, 32);
+		totalPanel.add(btnCalculate);
+		
+		
 	}
 
 	private void setPanel() {
