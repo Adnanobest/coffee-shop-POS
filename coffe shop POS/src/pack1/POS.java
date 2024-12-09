@@ -351,21 +351,18 @@ public class POS extends JFrame {
 		rdbtnL = new JRadioButton("L");
 		rdbtnL.setActionCommand("L");
 		rdbtnL.setBounds(69, 32, 43, 23);
-		rdbtnL.setEnabled(false);
 		drinksPanel.add(rdbtnL);
 		btngrpSize.add(rdbtnL);
 		
 		rdbtnM = new JRadioButton("M");
 		rdbtnM.setActionCommand("M");
 		rdbtnM.setBounds(114, 32, 47, 23);
-		rdbtnM.setEnabled(false);
 		drinksPanel.add(rdbtnM);
 		btngrpSize.add(rdbtnM);
 		
 		rdbtnS = new JRadioButton("S");
 		rdbtnS.setActionCommand("S");
 		rdbtnS.setBounds(163, 32, 47, 23);
-		rdbtnS.setEnabled(false);
 		drinksPanel.add(rdbtnS);
 		btngrpSize.add(rdbtnS);
 		
