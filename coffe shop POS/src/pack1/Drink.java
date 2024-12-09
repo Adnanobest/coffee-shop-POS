@@ -7,7 +7,7 @@ public class Drink extends Menu {
 
 		super(name, price);
 		if (HorC.length()==3) {
-			state=3;
+			state=0;
 		}else if(HorC.charAt(0)=='H'){
 			state=1;
 		}else {
