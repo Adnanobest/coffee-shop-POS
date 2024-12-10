@@ -14,11 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JList;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class POS extends JFrame {
 	
@@ -82,41 +85,36 @@ public class POS extends JFrame {
 		drinks.add(drink);
 		
 		JButton btndrink = new JButton(name);
+		btndrink.setSize(btnWidth, 50);
 		btndrink.addActionListener(drinkBtnActionListener(drink, btndrink));
-		btndrink.setActionCommand(price.toString());
 		drinkButtons.add(btndrink);
 		btndrink.setToolTipText(price.toString());
 		resetDrinks();
 	}
 	
 	static void resetDrinks() {
-		drinksPanel.removeAll();
-		drinksPanel.repaint();
-
-		drinksPanel.add(lblHorC);
-		drinksPanel.add(rdbtnHot);
-		drinksPanel.add(rdbtnCold);
-		drinksPanel.add(lblSize);
-		drinksPanel.add(rdbtnL);
-		drinksPanel.add(rdbtnM);
-		drinksPanel.add(rdbtnS);
-		drinksPanel.add(btnAddDrinkToCart);
+		menuPanel.removeAll();
+		menuPanel.repaint();
+		
+		btnWidth=scroll.getWidth()/7;
+		spc=btnWidth/7;
 
 		if (drinkButtons.isEmpty()) {
 			return;
 		}
-		int pos=spc;
+		int posX=spc;
 		int i=0;
-		height=60;		
+		height=10;		
 		for (JButton x : drinkButtons) {
 			if(i!=0 && i%6 == 0) {
-				pos=spc;
+				posX=spc;
 				height+=70;
 			} i++;
-			drinksPanel.add(x);
-			x.setBounds(pos, height, btnWidth, 50);
-			pos+=btnWidth+spc;
+			x.setBounds(posX, height, btnWidth, 50);
+			menuPanel.add(x);
+			posX+=btnWidth+spc;
 		}
+		menuPanel.setPreferredSize(new Dimension(625, height+70));
 	}
 
 	static void addDesserts(String name, Double price) {
@@ -138,6 +136,9 @@ public class POS extends JFrame {
 		dessertsPanel.repaint();
 		dessertsPanel.add(btnAddDessertToCart);
 		
+		btnWidth=scroll.getWidth()/7;
+		spc=btnWidth/7;
+
 		if (dessertButtons.isEmpty()) {
 			return;
 		}
@@ -159,6 +160,7 @@ public class POS extends JFrame {
 	private static JPanel contentPane;
 	private static JPanel panel;
 	private static JPanel drinksPanel;
+	private static JPanel menuPanel;
 	private static JPanel dessertsPanel;
 	private static JPanel totalPanel;
 	private static JScrollPane scroll;
@@ -176,7 +178,6 @@ public class POS extends JFrame {
 	static double total;
 	static ArrayList<Object> cart = new ArrayList<Object>(0);
 	static JList<String> list;
-	
 	static ArrayList<Drink> drinks = new ArrayList<Drink>(0);
 	static ArrayList<Dessert> desserts = new ArrayList<Dessert>(0);
 	static ArrayList<JButton> drinkButtons = new ArrayList<JButton>(0);
@@ -202,12 +203,11 @@ public class POS extends JFrame {
 		});
 	}
 
-
 	public POS() {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setBounds(100, 100, 1015, 500);
+		setBounds(100, 100, 1016, 500);
 		setMinimumSize(new Dimension(999, 500));
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -215,41 +215,9 @@ public class POS extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		panel = new JPanel();
-		panel.setBounds(0, 0, 111, 461);
-		contentPane.add(panel);
-		
-		setPanel();
-
-		drinksPanel = new JPanel();
-		drinksPanel.setBounds(111, 0, 555, 461);
-		contentPane.add(drinksPanel);
-		drinksPanel.setVisible(false);
-		
-		setDrinksPane();
-		
 		dessertsPanel = new JPanel();
-		dessertsPanel.setBounds(111, 0, 555, 461);
+		dessertsPanel.setBounds(125, 0, 625, 461);
 		contentPane.add(dessertsPanel);
-		
-		setDessertPanel();
-
-		totalPanel = new JPanel();
-		totalPanel.setBounds(666, 0, 333, 461);
-		contentPane.add(totalPanel);
-		
-		setTotalPanel();
-		
-//		scroll = new JScrollPane(drinkPanel);
-//		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-//		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//		scroll.setVisible(true);
-
-	}
-
-	private void setDessertPanel() {
-		dessertsPanel.setLayout(null);
-		dessertsPanel.setVisible(false);
 		
 		btnAddDessertToCart = new JButton("add to cart");
 		btnAddDessertToCart.addActionListener(new ActionListener() {
@@ -271,8 +239,38 @@ public class POS extends JFrame {
 				
 			}
 		});
-		btnAddDessertToCart.setBounds(235, 5, 85, 23);
+		btnAddDessertToCart.setBounds(-50, 174, 85, 23);
 		dessertsPanel.add(btnAddDessertToCart);
+		
+		panel = new JPanel();
+		panel.setBounds(0, 0, 125, 461);
+		contentPane.add(panel);
+		
+		setPanel();
+
+		drinksPanel = new JPanel();
+		drinksPanel.setBounds(125, 0, 625, 461);
+		contentPane.add(drinksPanel);
+		drinksPanel.setVisible(false);
+		
+		setDrinksPane();
+		
+		setDessertPanel();
+
+		totalPanel = new JPanel();
+		totalPanel.setBounds(750, 0, 250, 461);
+		contentPane.add(totalPanel);
+		
+		setTotalPanel();
+		
+		for (int i = 0; i < 50; i++) {
+			addDrink("dsf", 6.5, "H C");
+		}
+	}
+
+	private void setDessertPanel() {
+		dessertsPanel.setLayout(null);
+		dessertsPanel.setVisible(false);
 	}
 
 	private void setTotalPanel() {
@@ -297,6 +295,8 @@ public class POS extends JFrame {
 	}
 
 	private void setPanel() {
+		panel.setLayout(null);
+		
 		JButton btnDrinks = new JButton("Drinks");
 		btnDrinks.setBounds(10, 11, 89, 23);
 		btnDrinks.addActionListener(new ActionListener() {
@@ -305,7 +305,6 @@ public class POS extends JFrame {
 				drinksPanel.setVisible(true);
 			}
 		});
-		panel.setLayout(null);
 		panel.add(btnDrinks);
 		
 		JButton btnDesserts = new JButton("Desserts");
@@ -317,6 +316,17 @@ public class POS extends JFrame {
 			}
 		});
 		panel.add(btnDesserts);
+		
+		JButton btnNewButton = new JButton("New button");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				JOptionPane.showMessageDialog(contentPane, "mouseClicked");
+			}
+			
+			
+		});
+		btnNewButton.setBounds(10, 79, 89, 23);
+		panel.add(btnNewButton);
 	}
 
 	private void setDrinksPane() {
@@ -351,21 +361,18 @@ public class POS extends JFrame {
 		rdbtnL = new JRadioButton("L");
 		rdbtnL.setActionCommand("L");
 		rdbtnL.setBounds(69, 32, 43, 23);
-		rdbtnL.setEnabled(false);
 		drinksPanel.add(rdbtnL);
 		btngrpSize.add(rdbtnL);
 		
 		rdbtnM = new JRadioButton("M");
 		rdbtnM.setActionCommand("M");
 		rdbtnM.setBounds(114, 32, 47, 23);
-		rdbtnM.setEnabled(false);
 		drinksPanel.add(rdbtnM);
 		btngrpSize.add(rdbtnM);
 		
 		rdbtnS = new JRadioButton("S");
 		rdbtnS.setActionCommand("S");
 		rdbtnS.setBounds(163, 32, 47, 23);
-		rdbtnS.setEnabled(false);
 		drinksPanel.add(rdbtnS);
 		btngrpSize.add(rdbtnS);
 		
@@ -398,5 +405,13 @@ public class POS extends JFrame {
 				
 		btnAddDrinkToCart.setBounds(337, 32, 85, 23);
 		drinksPanel.add(btnAddDrinkToCart);
+		
+		menuPanel = new JPanel();
+		menuPanel.setLayout(null);
+		scroll=new JScrollPane(menuPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
+										, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll.getVerticalScrollBar().setUnitIncrement(16);
+		scroll.setBounds(0, 55, 625, 406);
+		drinksPanel.add(scroll);
 	}
 }

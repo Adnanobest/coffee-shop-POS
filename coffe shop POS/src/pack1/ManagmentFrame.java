@@ -40,7 +40,7 @@ public class ManagmentFrame extends JFrame {
 		});
 	}
 
-	public ManagmentFrame(ArrayList<Drink> drinks, ArrayList<Dessert> desserts) {
+	public ManagmentFrame(ArrayList<Drink> drinksaAL, ArrayList<Dessert> dessertsAL) {
 		setTitle("Management");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 568, 350);
@@ -49,8 +49,8 @@ public class ManagmentFrame extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		drinks=this.drinks;
-		desserts=this.desserts;
+		drinks=drinksaAL;
+		desserts=dessertsAL;
 
 		JLayeredPane addPane = new JLayeredPane();
 		addPane.setBounds(0, 0,138,311);
