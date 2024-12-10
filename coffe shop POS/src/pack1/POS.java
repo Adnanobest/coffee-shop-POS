@@ -323,7 +323,12 @@ public class POS extends JFrame {
 				JOptionPane.showMessageDialog(contentPane, "mouseClicked");
 			}
 			
-			
+			public void mousePressed(MouseEvent e) {
+				JOptionPane.showMessageDialog(contentPane, "mousePressed");
+			}
+			public void mouseReleased(MouseEvent e) {
+				JOptionPane.showMessageDialog(contentPane, "released");
+			}
 		});
 		btnNewButton.setBounds(10, 79, 89, 23);
 		panel.add(btnNewButton);
