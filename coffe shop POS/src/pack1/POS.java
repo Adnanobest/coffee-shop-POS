@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -11,17 +12,13 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JList;
-import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class POS extends JFrame {
 	
@@ -41,7 +38,7 @@ public class POS extends JFrame {
 				selectedButton=btndrink;
 				btngrpHorC.clearSelection();
 				btngrpSize.clearSelection();
-
+				
 				switch (drink.state) {
 				case 0:
 					rdbtnHot.setEnabled(true);
@@ -85,7 +82,6 @@ public class POS extends JFrame {
 		drinks.add(drink);
 		
 		JButton btndrink = new JButton(name);
-		btndrink.setSize(btnWidth, 50);
 		btndrink.addActionListener(drinkBtnActionListener(drink, btndrink));
 		drinkButtons.add(btndrink);
 		btndrink.setToolTipText(price.toString());
@@ -123,7 +119,11 @@ public class POS extends JFrame {
 		JButton dessert = new JButton(name);
 		dessert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				selectedButton=dessert;
+				listModel.addElement(name +", "+ df.format(price));
+				total+=price;
+				
+				lblTotal.setText("Total: "+total);
+				list.setModel(listModel);
 			}
 		});
 		
@@ -188,7 +188,8 @@ public class POS extends JFrame {
 	static int height= 5;
 	private static JButton btnAddDessertToCart;
 	private static JButton btnAddDrinkToCart;
-	private DefaultListModel<String> listModel= new DefaultListModel<>();
+	private static DefaultListModel<String> listModel= new DefaultListModel<>();
+	static DecimalFormat df = new DecimalFormat("#.###");
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -215,9 +216,40 @@ public class POS extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		panel = new JPanel();
+		panel.setBounds(0, 0, 125, 461);
+		contentPane.add(panel);
+
+		drinksPanel = new JPanel();
+		drinksPanel.setBounds(125, 0, 625, 461);
+		contentPane.add(drinksPanel);
+		drinksPanel.setVisible(false);
+
 		dessertsPanel = new JPanel();
 		dessertsPanel.setBounds(125, 0, 625, 461);
 		contentPane.add(dessertsPanel);
+		
+		totalPanel = new JPanel();
+		totalPanel.setBounds(750, 0, 250, 461);
+		contentPane.add(totalPanel);
+
+		setPanel();
+
+		setDrinksPane();
+
+		setDessertPanel();
+
+		setTotalPanel();
+		
+		for (int i = 0; i < 10; i++) {
+			addDrink("drink"+i, 6.5, "H C");
+			addDesserts("dessert "+i, 5.2);
+		}
+	}
+
+	private void setDessertPanel() {
+		dessertsPanel.setLayout(null);
+		dessertsPanel.setVisible(false);
 		
 		btnAddDessertToCart = new JButton("add to cart");
 		btnAddDessertToCart.addActionListener(new ActionListener() {
@@ -241,36 +273,6 @@ public class POS extends JFrame {
 		});
 		btnAddDessertToCart.setBounds(-50, 174, 85, 23);
 		dessertsPanel.add(btnAddDessertToCart);
-		
-		panel = new JPanel();
-		panel.setBounds(0, 0, 125, 461);
-		contentPane.add(panel);
-		
-		setPanel();
-
-		drinksPanel = new JPanel();
-		drinksPanel.setBounds(125, 0, 625, 461);
-		contentPane.add(drinksPanel);
-		drinksPanel.setVisible(false);
-		
-		setDrinksPane();
-		
-		setDessertPanel();
-
-		totalPanel = new JPanel();
-		totalPanel.setBounds(750, 0, 250, 461);
-		contentPane.add(totalPanel);
-		
-		setTotalPanel();
-		
-		for (int i = 0; i < 50; i++) {
-			addDrink("dsf", 6.5, "H C");
-		}
-	}
-
-	private void setDessertPanel() {
-		dessertsPanel.setLayout(null);
-		dessertsPanel.setVisible(false);
 	}
 
 	private void setTotalPanel() {
@@ -290,8 +292,20 @@ public class POS extends JFrame {
 		totalPanel.add(btnAdmin);
 		
 		lblTotal = new JLabel("Total: 0");
-		lblTotal.setBounds(66, 383, 46, 14);
+		lblTotal.setBounds(66, 383, 89, 14);
 		totalPanel.add(lblTotal);
+		
+		JButton btnRemove = new JButton("Remove item");
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				total -= Double.parseDouble(list.getSelectedValue().split(",")[1]);
+				listModel.remove(list.getSelectedIndex());
+				lblTotal.setText("Total: "+ Double.toString(total));
+				list.setModel(listModel);
+			}
+		});
+		btnRemove.setBounds(133, 338, 89, 23);
+		totalPanel.add(btnRemove);
 	}
 
 	private void setPanel() {
@@ -316,22 +330,6 @@ public class POS extends JFrame {
 			}
 		});
 		panel.add(btnDesserts);
-		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "mouseClicked");
-			}
-			
-			public void mousePressed(MouseEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "mousePressed");
-			}
-			public void mouseReleased(MouseEvent e) {
-				JOptionPane.showMessageDialog(contentPane, "released");
-			}
-		});
-		btnNewButton.setBounds(10, 79, 89, 23);
-		panel.add(btnNewButton);
 	}
 
 	private void setDrinksPane() {
@@ -396,15 +394,16 @@ public class POS extends JFrame {
 						double price = drink.getPrice() * drinkSize();
 						total += price;
 						lblTotal.setText("Total: " + Double.toString(total));
-						listModel.addElement(drink.name+", "+ btngrpHorC.getSelection().getActionCommand()
-								+", "+ btngrpSize.getSelection().getActionCommand()
-								+", "+ price);
+						listModel.addElement(drink.name+", "+ price
+								+", "+ btngrpHorC.getSelection().getActionCommand()
+								+", "+ btngrpSize.getSelection().getActionCommand());
+						list.setModel(listModel);
 						btngrpHorC.clearSelection();
 						btngrpSize.clearSelection();
 						selectedButton=null;
+						return;
 					}
 				}
-				list.setModel(listModel);
 			}
 		});
 				

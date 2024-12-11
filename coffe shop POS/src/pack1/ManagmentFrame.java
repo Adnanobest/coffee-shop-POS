@@ -233,8 +233,8 @@ public class ManagmentFrame extends JFrame {
 							}
 						
 							POS.addDrink(name, price, horc);
-							JOptionPane.showMessageDialog(contentPane, drinks.get(drinks.size()-1).name+" Saved with price "
-									+drinks.get(drinks.size()-1).getPrice()+" with "+ horc +" available");
+							JOptionPane.showMessageDialog(contentPane, drinks.getLast().name+" Saved with price "
+									+drinks.getLast().getPrice()+" with "+ horc +" available");
 							refresh();
 							txtDrinkName.setText("");
 							txtPrice.setText("");
