@@ -177,7 +177,6 @@ public class POS extends JFrame {
 	static double total;
 	static ArrayList<Object> cart = new ArrayList<Object>(0);
 	static JList<String> list;
-	
 	static ArrayList<Drink> drinks = new ArrayList<Drink>(0);
 	static ArrayList<Dessert> desserts = new ArrayList<Dessert>(0);
 	static ArrayList<JButton> drinkButtons = new ArrayList<JButton>(0);
@@ -276,13 +275,13 @@ public class POS extends JFrame {
 				
 			}
 		});
-		btnAddDessertToCart.setBounds(235, 5, 85, 23);
+		btnAddDessertToCart.setBounds(337, 32, 100, 33);
 		dessertsPanel.add(btnAddDessertToCart);
 	}
 
 	private void setTotalPanel() {
 		JButton btnAdmin = new JButton("Admin");
-		btnAdmin.setBounds(122, 438, 61, 23);
+		btnAdmin.setBounds(121, 423, 83, 38);
 		btnAdmin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LoginFrame x = new LoginFrame(drinks, desserts);
@@ -309,7 +308,7 @@ public class POS extends JFrame {
 		totalPanel.add(textPaid);
 		textPaid.setColumns(10);
 		
-		lblReminder = new JLabel("Reminder:");
+		lblReminder = new JLabel("Remainder:");
 		lblReminder.setBounds(41, 400, 128, 13);
 		totalPanel.add(lblReminder);
 		
@@ -330,7 +329,52 @@ public class POS extends JFrame {
 		btnCalculate.setBounds(197, 354, 100, 32);
 		totalPanel.add(btnCalculate);
 		
-		
+		JButton btnRemoveCart = new JButton("Remove");
+		btnRemoveCart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int selectedIndex = list.getSelectedIndex();
+				if(selectedIndex != -1) {
+					
+					/*for (Dessert d : desserts) {
+						if(d.name.equals(list.getSelectedValue().split(",")[0])) {
+							total -= d.getPrice();
+							lblTotal.setText("Total: "+total);
+						}
+					}
+					
+					for (Drink d : drinks) {
+						if(d.name.equals(list.getSelectedValue().split(",")[0])){
+							String size = list.getSelectedValue().split(",")[2];
+							double x = 0;
+							
+							if (size.equals(" L")) {
+								x = 1.25;
+							}
+							else if (size.equals(" M")) {
+								x = 1.0;
+							}
+							else if (size.equals(" S")){
+								x = 0.75;
+							}
+							
+							double price = d.getPrice();
+							total -= price*x;
+							lblTotal.setText("Total: "+total);
+						}
+					}*/
+					total -= Double.parseDouble(list.getSelectedValue().split(",")[1]);
+					lblTotal.setText("Total: "+total);
+					listModel.remove(list.getSelectedIndex());
+					JOptionPane.showMessageDialog(contentPane, "Item removed from the cart!");
+				}
+				else {
+					JOptionPane.showMessageDialog(contentPane, "Please choose an item to remove");
+				}
+			}
+		});
+		btnRemoveCart.setBounds(197, 326, 100, 21);
+		totalPanel.add(btnRemoveCart);
 	}
 
 	private void setPanel() {
@@ -360,20 +404,20 @@ public class POS extends JFrame {
 		drinksPanel.setLayout(null);
 		drinksPanel.setVisible(false);
 		lblHorC = new JLabel("Hot or cold");
-		lblHorC.setBounds(10, 11, 52, 14);
+		lblHorC.setBounds(10, 11, 87, 14);
 		drinksPanel.add(lblHorC);
 		
 		btngrpHorC = new ButtonGroup();
 		
 		rdbtnHot = new JRadioButton("Hot");
-		rdbtnHot.setBounds(69, 7, 43, 23);
+		rdbtnHot.setBounds(81, 7, 58, 23);
 		rdbtnHot.setActionCommand("H");
 		rdbtnHot.setEnabled(false);
 		drinksPanel.add(rdbtnHot);
 		btngrpHorC.add(rdbtnHot);
 		
 		rdbtnCold = new JRadioButton("Cold");
-		rdbtnCold.setBounds(114, 7, 47, 23);
+		rdbtnCold.setBounds(141, 7, 69, 23);
 		rdbtnCold.setActionCommand("C");
 		rdbtnCold.setEnabled(false);
 		drinksPanel.add(rdbtnCold);
@@ -418,9 +462,9 @@ public class POS extends JFrame {
 						double price = drink.getPrice() * drinkSize();
 						total += price;
 						lblTotal.setText("Total: " + Double.toString(total));
-						listModel.addElement(drink.name+", "+ btngrpHorC.getSelection().getActionCommand()
+						listModel.addElement(drink.name+", "+ price
 								+", "+ btngrpSize.getSelection().getActionCommand()
-								+", "+ price);
+								+", "+ btngrpHorC.getSelection().getActionCommand());
 						btngrpHorC.clearSelection();
 						btngrpSize.clearSelection();
 						selectedButton=null;
@@ -430,7 +474,7 @@ public class POS extends JFrame {
 			}
 		});
 				
-		btnAddDrinkToCart.setBounds(337, 32, 85, 23);
+		btnAddDrinkToCart.setBounds(337, 11, 100, 33);
 		drinksPanel.add(btnAddDrinkToCart);
 	}
 }
