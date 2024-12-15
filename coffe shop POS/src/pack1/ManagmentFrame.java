@@ -11,19 +11,25 @@ import java.awt.event.ActionEvent;
 import javax.swing.border.MatteBorder;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class ManagmentFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtDrinkName;
-	private JTextField txtPrice;
+	private JTextField txtDrinkPrice;
 	private JTextField txtDessertName;
 	private JTextField txtDessertPrice;
 	DefaultListModel<String> listModel = new DefaultListModel<>();
 	static JList<String> list;
 	ArrayList<Drink> drinks;
 	ArrayList<Dessert> desserts;
+	JPanel addPane;
+	JPanel addDrinkPane;
+	JPanel addDessertPane;
+	JPanel listPane;
 	
 	Font font = new Font("Tahoma", Font.PLAIN, 13);
 
@@ -45,6 +51,11 @@ public class ManagmentFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 568, 350);
 		contentPane = new JPanel();
+		contentPane.addComponentListener(new ComponentAdapter() {
+			public void componentResized(ComponentEvent e) {
+				resize();
+			}
+		});
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -52,23 +63,23 @@ public class ManagmentFrame extends JFrame {
 		drinks=drinksaAL;
 		desserts=dessertsAL;
 
-		JLayeredPane addPane = new JLayeredPane();
+		addPane = new JPanel();
 		addPane.setBounds(0, 0,138,311);
 		contentPane.add(addPane);
 
-		JLayeredPane addDrinkPane = new JLayeredPane();
+		addDrinkPane = new JPanel();
 		addDrinkPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		addDrinkPane.setBounds(138, 0, 207, 311);
 		contentPane.add(addDrinkPane);
 		addDrinkPane.setVisible(false);
 		
-		JLayeredPane addDessertPane = new JLayeredPane();
+		addDessertPane = new JPanel();
 		addDessertPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		addDessertPane.setBounds(138, 0, 207, 311);
 		contentPane.add(addDessertPane);
 		addDessertPane.setVisible(false);
 		
-		JLayeredPane listPane = new JLayeredPane();
+		listPane = new JPanel();
 		listPane.setBounds(345, 0, 207, 311);
 		contentPane.add(listPane);
 		
@@ -83,6 +94,14 @@ public class ManagmentFrame extends JFrame {
 	
 	}
 	
+	protected void resize() {
+		
+		addPane.setSize(contentPane.getWidth()/4, contentPane.getHeight());
+		addDrinkPane.setBounds(addPane.getWidth(), 0, contentPane.getWidth()*3/8, contentPane.getHeight());
+		addDessertPane.setBounds(addPane.getWidth(), 0, contentPane.getWidth()*3/8, contentPane.getHeight());
+		listPane.setBounds(contentPane.getWidth()*5/8, 0, contentPane.getWidth()*3/8, contentPane.getHeight());		
+	}
+
 	private boolean isNum(String str) {
 		int dot=0;
 		for (char x : str.toCharArray()) {
@@ -113,9 +132,11 @@ public class ManagmentFrame extends JFrame {
 		list.setModel(listModel);
 	}
 	
-	private void addPane(JLayeredPane addDrinkPane,
-			JLayeredPane addDessertPane, JLayeredPane addPane) {
+	private void addPane(JPanel addDrinkPane,
+			JPanel addDessertPane, JPanel addPane) {
+		addPane.setLayout(null);
 		JButton btnAddDrink = new JButton("add drink");
+		btnAddDrink.setMnemonic('K');
 		btnAddDrink.setFont(font);
 		btnAddDrink.setBounds(5, 103,128, 42 );
 		addPane.add(btnAddDrink);
@@ -127,6 +148,7 @@ public class ManagmentFrame extends JFrame {
 		});
 		
 		JButton btnAddDessert = new JButton("add dessert");
+		btnAddDessert.setMnemonic('R');
 		btnAddDessert.setFont(font);
 		btnAddDessert.setBounds(5, 161,128, 42 );
 		addPane.add(btnAddDessert);
@@ -138,20 +160,21 @@ public class ManagmentFrame extends JFrame {
 		});
 	}
 	
-	private void listPane(JLayeredPane listPane) {
-		list = new JList<String>(listModel);
-		JScrollPane scrol = new JScrollPane(list
-				, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
-				, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrol.setBounds(0, 0, 207, 249);
+	private void listPane(JPanel listPane) {
+		listPane.setLayout(null);
 		
-		listPane.add(scrol);
+		list = new JList<String>(listModel);
+		JScrollPane scroll = new JScrollPane(list);
+		scroll.setBounds(0, 0, 207, 249);
+		
+		listPane.add(scroll);
 		
 		JLabel lblSelected = new JLabel("for selected item:");
 		lblSelected.setBounds(5, 255, 101, 16);
 		listPane.add(lblSelected);
 
 		JButton btnRemove = new JButton("Remove");
+		btnRemove.setMnemonic('V');
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				remove();
@@ -162,7 +185,8 @@ public class ManagmentFrame extends JFrame {
 		btnRemove.setBounds(106, 269, 96, 42);
 		listPane.add(btnRemove);
 		
-		JButton btnChangePrice = new JButton("<html>Change<br>Price");
+		JButton btnChangePrice = new JButton("<html><p style='text-align:center;'>Change<br>Price</p>");
+		btnChangePrice.setMnemonic('G');
 		btnChangePrice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				changePrice();
@@ -173,58 +197,65 @@ public class ManagmentFrame extends JFrame {
 		btnChangePrice.setBounds(5, 269, 96, 42);
 		listPane.add(btnChangePrice);
 
-		refresh();
 	}
 
-	private void addDrinkPane(JLayeredPane addDrinkPane) {
+	private void addDrinkPane(JPanel addDrinkPane) {
+		addDrinkPane.setLayout(null);
 		JLabel lblDrinkName = new JLabel("Drink name", JLabel.CENTER);
 		lblDrinkName.setFont(font);
-		lblDrinkName.setBounds(70, 22, 67, 16);
+		lblDrinkName.setBounds(25, 8, 65, 16);
+		lblDrinkName.setDisplayedMnemonic('N');
 		addDrinkPane.add(lblDrinkName);
 		
 		txtDrinkName = new JTextField();
-		txtDrinkName.setBounds(50, 50, 107, 20);
+		txtDrinkName.setBounds(95, 6, 86, 20);
 		addDrinkPane.add(txtDrinkName);
 		txtDrinkName.setColumns(10);
 		
-		JLabel lblPrice = new JLabel("Price for size: M", JLabel.CENTER);
-		lblPrice.setFont(font);
-		lblPrice.setBounds(55, 82, 97, 16);
-		addDrinkPane.add(lblPrice);
+		lblDrinkName.setLabelFor(txtDrinkName);
 		
-		txtPrice = new JTextField();
-		txtPrice.setBounds(50, 108, 107, 20);
-		addDrinkPane.add(txtPrice);
-		txtPrice.setColumns(10);
+		JLabel lblDrinkPrice = new JLabel("Price for size: M", JLabel.CENTER);
+		lblDrinkPrice.setFont(font);
+		lblDrinkPrice.setBounds(11, 33, 93, 16);
+		lblDrinkPrice.setDisplayedMnemonic('P');
+		addDrinkPane.add(lblDrinkPrice);
+		
+		txtDrinkPrice = new JTextField();
+		txtDrinkPrice.setBounds(109, 31, 86, 20);
+		addDrinkPane.add(txtDrinkPrice);
+		txtDrinkPrice.setColumns(10);
+		lblDrinkPrice.setLabelFor(txtDrinkPrice);
 		
 		JLabel lblHorC = new JLabel("Hot or cold", JLabel.CENTER);
 		lblHorC.setFont(font);
-		lblHorC.setBounds(65, 140, 77, 14);
+		lblHorC.setBounds(19, 60, 62, 16);
 		addDrinkPane.add(lblHorC);
 		
 		JCheckBox chckbxHot = new JCheckBox("Hot");
 		chckbxHot.setFont(font);
-		chckbxHot.setBounds(53, 166, 45, 25);
+		chckbxHot.setBounds(86, 56, 45, 25);
 		addDrinkPane.add(chckbxHot);
-		chckbxHot.setMnemonic(KeyEvent.VK_H);
+		chckbxHot.setMnemonic('H');
 		chckbxHot.setActionCommand("H");
 		
 		JCheckBox chckbxCold = new JCheckBox("Cold");
+		chckbxCold.setMnemonic('C');
 		chckbxCold.setFont(font);
-		chckbxCold.setBounds(103, 166, 51, 25);
+		chckbxCold.setBounds(136, 56, 51, 25);
 		addDrinkPane.add(chckbxCold);
 
 		JButton btnSaveDrink = new JButton("Save Drink");
+		btnSaveDrink.setMnemonic('S');
 		btnSaveDrink.setFont(font);
-		btnSaveDrink.setBounds(40, 258, 127, 42);
+		btnSaveDrink.setBounds(57, 86, 93, 25);
 		addDrinkPane.add(btnSaveDrink);
 		btnSaveDrink.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtDrinkName.getText().equals("")) {
-					if(isNum(txtPrice.getText())) {
+					if(isNum(txtDrinkPrice.getText())) {
 						if (chckbxHot.isSelected() || chckbxCold.isSelected()) {
 							String name=txtDrinkName.getText();
-							Double price = Double.parseDouble(txtPrice.getText());
+							Double price = Double.parseDouble(txtDrinkPrice.getText());
 							String horc="";
 							if (chckbxHot.isSelected()) {
 								horc+="H"+" ";
@@ -237,7 +268,7 @@ public class ManagmentFrame extends JFrame {
 									+drinks.getLast().getPrice()+" with "+ horc +" available");
 							refresh();
 							txtDrinkName.setText("");
-							txtPrice.setText("");
+							txtDrinkPrice.setText("");
 							chckbxHot.setSelected(false);
 							chckbxCold.setSelected(false);
 						}else {
@@ -251,30 +282,36 @@ public class ManagmentFrame extends JFrame {
 		});
 	}
 
-	private void addDessertPane(JLayeredPane addDessertPane) {
+	private void addDessertPane(JPanel addDessertPane) {
+		addDessertPane.setLayout(null);
 		JLabel lblDessertName = new JLabel("Dessert name", JLabel.CENTER);
 		lblDessertName.setFont(font);
-		lblDessertName.setBounds(64, 22, 79, 16);
+		lblDessertName.setBounds(18, 8, 79, 16);
+		lblDessertName.setDisplayedMnemonic('N');
 		addDessertPane.add(lblDessertName);
 		
 		txtDessertName = new JTextField();
-		txtDessertName.setBounds(50, 50, 107, 20);
+		txtDessertName.setBounds(102, 6, 86, 20);
 		addDessertPane.add(txtDessertName);
 		txtDessertName.setColumns(10);
+		lblDessertName.setLabelFor(txtDessertName);
 		
 		JLabel lblDessertPrice = new JLabel("Price", JLabel.CENTER);
 		lblDessertPrice.setFont(font);
-		lblDessertPrice.setBounds(70, 82, 67, 14);
+		lblDessertPrice.setBounds(44, 33, 28, 16);
+		lblDessertPrice.setDisplayedMnemonic('P');
 		addDessertPane.add(lblDessertPrice);
 		
 		txtDessertPrice = new JTextField();
-		txtDessertPrice.setBounds(50, 108, 107, 20);
+		txtDessertPrice.setBounds(77, 31, 86, 20);
 		addDessertPane.add(txtDessertPrice);
 		txtDessertPrice.setColumns(10);
+		lblDessertPrice.setLabelFor(txtDessertPrice);
 				
 		JButton btnSaveDessert = new JButton("Save Dessert");
+		btnSaveDessert.setMnemonic('S');
 		btnSaveDessert.setFont(font);
-		btnSaveDessert.setBounds(40, 258, 127, 42);
+		btnSaveDessert.setBounds(50, 56, 107, 25);
 		addDessertPane.add(btnSaveDessert);
 
 		btnSaveDessert.addActionListener(new ActionListener() {
