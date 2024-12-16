@@ -293,7 +293,7 @@ public class POS extends JFrame {
 		
 		JButton btnRemove = new JButton("Remove item");
 		btnRemove.setFont(font);
-		btnRemove.setMnemonic('R');
+		btnRemove.setMnemonic('V');
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (list.getSelectedValue()==null) {

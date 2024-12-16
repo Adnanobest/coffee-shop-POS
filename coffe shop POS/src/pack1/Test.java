@@ -264,8 +264,8 @@ public class Test extends JFrame {
 							}
 						
 							POS.addDrink(name, price, horc);
-							JOptionPane.showMessageDialog(contentPane, drinks.getLast().name+" Saved with price "
-									+drinks.getLast().getPrice()+" with "+ horc +" available");
+							JOptionPane.showMessageDialog(contentPane, drinks.get(drinks.size()).name+" Saved with price "
+									+drinks.get(drinks.size()).getPrice()+" with "+ horc +" available");
 							refresh();
 							txtDrinkName.setText("");
 							txtDrinkPrice.setText("");
