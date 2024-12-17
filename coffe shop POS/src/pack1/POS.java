@@ -14,12 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JList;
-import java.awt.Color;
-import javax.swing.JTextField;
 
 public class POS extends JFrame {
 	
@@ -162,7 +158,6 @@ public class POS extends JFrame {
 	private static JPanel drinksPanel;
 	private static JPanel dessertsPanel;
 	private static JPanel totalPanel;
-	private static JScrollPane scroll;
 	private static JLabel lblHorC;
 	private static ButtonGroup btngrpHorC;
 	private static JRadioButton rdbtnHot;
@@ -188,10 +183,6 @@ public class POS extends JFrame {
 	private static JButton btnAddDessertToCart;
 	private static JButton btnAddDrinkToCart;
 	private DefaultListModel<String> listModel= new DefaultListModel<>();
-	private JLabel lblPaid;
-	private JTextField textPaid;
-	private JButton btnCalculate;
-	private JLabel lblReminder;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -299,36 +290,6 @@ public class POS extends JFrame {
 		lblTotal.setBounds(41, 340, 100, 14);
 		totalPanel.add(lblTotal);
 		
-		lblPaid = new JLabel("Paid:");
-		lblPaid.setBounds(41, 364, 45, 13);
-		totalPanel.add(lblPaid);
-		
-		textPaid = new JTextField();
-		textPaid.setBounds(73, 361, 96, 19);
-		totalPanel.add(textPaid);
-		textPaid.setColumns(10);
-		
-		lblReminder = new JLabel("Remainder:");
-		lblReminder.setBounds(41, 400, 128, 13);
-		totalPanel.add(lblReminder);
-		
-		btnCalculate = new JButton("Calculate");
-		btnCalculate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				double paid = Double.parseDouble(textPaid.getText());
-				if(paid<total) {
-					JOptionPane.showMessageDialog(contentPane, "The paid amount is less than the total!");
-					textPaid.setText("");
-				}else {
-					double reminder = paid - total;
-					lblReminder.setText("Reminder: "+reminder);
-				}
-			}
-		});
-		btnCalculate.setBounds(197, 354, 100, 32);
-		totalPanel.add(btnCalculate);
-		
 		JButton btnRemoveCart = new JButton("Remove");
 		btnRemoveCart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -375,6 +336,26 @@ public class POS extends JFrame {
 		});
 		btnRemoveCart.setBounds(197, 326, 100, 21);
 		totalPanel.add(btnRemoveCart);
+		
+		JButton btnPay = new JButton("Pay");
+		btnPay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				double paid = Double.parseDouble(JOptionPane.showInputDialog(contentPane, "Enter the paid amount: "));
+				if(paid<total) {
+					JOptionPane.showMessageDialog(contentPane, "Paid amount is less than the total");
+				}
+				else {
+					double remainder = paid - total;
+					JOptionPane.showMessageDialog(contentPane, "The remainder is: "+remainder);
+					listModel.removeAllElements();
+					total = 0;
+					lblTotal.setText("Total: 0");
+				}
+			}
+		});
+		btnPay.setBounds(197, 359, 100, 21);
+		totalPanel.add(btnPay);
 	}
 
 	private void setPanel() {
