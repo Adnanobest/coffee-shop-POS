@@ -266,7 +266,7 @@ public class POS extends JFrame {
 		dessertScroll.setBounds(0, 0, 625, 461);
 		dessertsPanel.add(dessertScroll);
 		
-		lblDessert = new JLabel("Click on the selected dessert");
+		lblDessert = new JLabel("Click on   the selected dessert");
 		dessertScroll.setColumnHeaderView(lblDessert);
 
 	}
