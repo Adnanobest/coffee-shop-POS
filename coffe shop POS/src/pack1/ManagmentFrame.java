@@ -112,7 +112,7 @@ public class ManagmentFrame extends JFrame {
 	}
 
 	private void refresh() {
-		if (drinks!=null || desserts!=null) {
+		if (!drinks.isEmpty() || !desserts.isEmpty()) {
 			listModel.clear();
 			listModel.addElement("Drinks:");
 			for (Drink x : drinks) {
@@ -344,6 +344,7 @@ public class ManagmentFrame extends JFrame {
 						JOptionPane.showMessageDialog(contentPane, list.getSelectedValue() + " deleted");
 						drinks.remove(x);
 						pos.removeButton(list.getSelectedValue().split(",")[0], 0);
+						pos.resetDrinks();
 						return;
 					}
 				}
@@ -353,6 +354,7 @@ public class ManagmentFrame extends JFrame {
 						JOptionPane.showMessageDialog(contentPane, list.getSelectedValue() + " deleted");
 						desserts.remove(x);
 						pos.removeButton(list.getSelectedValue().split(",")[0], 1);
+						pos.resetDesserts();
 						return;
 					}
 				}

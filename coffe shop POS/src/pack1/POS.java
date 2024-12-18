@@ -1,5 +1,6 @@
 package pack1;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -19,7 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+
 import net.miginfocom.swing.MigLayout;
 
 public class POS extends JFrame {
@@ -94,25 +96,15 @@ public class POS extends JFrame {
 		drinkMenuPanel.removeAll();
 		drinkMenuPanel.repaint();
 		
-		btnWidth=drinkScroll.getWidth()/7;
-		spc=btnWidth/7;
-
 		if (drinkButtons.isEmpty()) {
 			return;
 		}
-		int posX=spc;
 		int i=0;
-		height=10;		
-		for (JButton x : drinkButtons) {
-			if(i!=0 && i%6 == 0) {
-				posX=spc;
-				height+=70;
-			} i++;
-			x.setBounds(posX, height, btnWidth, 50);
-			drinkMenuPanel.add(x);
-			posX+=btnWidth+spc;
+		for (JButton button: drinkButtons) {
+			button.setToolTipText(drinks.get(i++).getPrice().toString());
+			drinkMenuPanel.add(button, "grow");
 		}
-		drinkMenuPanel.setPreferredSize(new Dimension(625, height+70));
+		//drinkMenuPanel.setPreferredSize(new Dimension(625, height+70));
 	}
 
 	void addDesserts(String name, Double price) {
@@ -218,7 +210,7 @@ public class POS extends JFrame {
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(100, 100, 1016, 500);
 		setMinimumSize(new Dimension(999, 500));
-		contentPane = new JPanel(new MigLayout("debug, fill, insets 0, hidemode 3", "[12.5%][62.5%][25%]", "[]"));
+		contentPane = new JPanel(new MigLayout("debug, fill, insets 0, hidemode 3", "[:12.5%:250][62.5%][25%]", "[]"));
 
 
 		setContentPane(contentPane);
@@ -250,17 +242,18 @@ public class POS extends JFrame {
 	}
 
 	private void setDessertPanel() {
-		dessertsPanel.setLayout(null);
+		dessertsPanel.setLayout(new MigLayout("debug, fill, insets 0", "", ""));
 		dessertsPanel.setVisible(false);
 		
 		dessertMenuPanel = new JPanel();
-		dessertMenuPanel.setLayout(null);
+		dessertMenuPanel.setLayout(new MigLayout("debug, fill, insets 0, wrap 6", "", ""));
+		
 		dessertScroll = new JScrollPane(dessertMenuPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
 										, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		dessertScroll.getVerticalScrollBar().setUnitIncrement(16);
-		dessertScroll.setBounds(0, 0, 625, 461);
-		dessertsPanel.add(dessertScroll);
+		dessertsPanel.add(dessertScroll, "grow");
 		
+		dessertMenuPanel.add(new JButton("ddd"), "grow");
 		lblDessert = new JLabel("Click on   the selected dessert");
 		dessertScroll.setColumnHeaderView(lblDessert);
 
@@ -343,62 +336,55 @@ public class POS extends JFrame {
 	}
 
 	private void setDrinksPane() {
-		drinksPanel.setLayout(null);
+		drinksPanel.setLayout(new MigLayout("debug, fill, insets 5", "", "[5%!][5%!][5%!][]"));
 		drinksPanel.setVisible(false);
-		lblHorC = new JLabel("Hot or Cold");
-		lblHorC.setFont(font);
-		lblHorC.setBounds(5, 15, 64, 16);
-		drinksPanel.add(lblHorC);
 		
 		btngrpHorC = new ButtonGroup();
 		
 		lblDrink = new JLabel("Select the drink, the size and either hot or cold then press add to cart");
 		lblDrink.setFont(font);
-		lblDrink.setBounds(5, 0, 422, 16);
-		drinksPanel.add(lblDrink);
+		drinksPanel.add(lblDrink, "span 3, grow");
+
+		lblHorC = new JLabel("Hot or Cold");
+		lblHorC.setFont(font);
+		drinksPanel.add(lblHorC, "cell 0 1, grow");
 		
 		rdbtnHot = new JRadioButton("Hot");
 		rdbtnHot.setMnemonic('H');
-		rdbtnHot.setBounds(75, 13, 43, 23);
 		rdbtnHot.setActionCommand("H");
 		rdbtnHot.setEnabled(false);
-		drinksPanel.add(rdbtnHot);
+		drinksPanel.add(rdbtnHot, "grow, split 2");
 		btngrpHorC.add(rdbtnHot);
 		
 		rdbtnCold = new JRadioButton("Cold");
 		rdbtnCold.setMnemonic('C');
-		rdbtnCold.setBounds(120, 13, 47, 23);
 		rdbtnCold.setActionCommand("C");
 		rdbtnCold.setEnabled(false);
-		drinksPanel.add(rdbtnCold);
+		drinksPanel.add(rdbtnCold, "grow");
 		btngrpHorC.add(rdbtnCold);
 		
 		lblSize = new JLabel("Size");
 		lblSize.setFont(font);
-		lblSize.setBounds(5, 33, 64, 16);
-		drinksPanel.add(lblSize);
+		drinksPanel.add(lblSize, "cell 0 2, grow");
 		
 		btngrpSize = new ButtonGroup();
 		
 		rdbtnL = new JRadioButton("L");
 		rdbtnL.setMnemonic('L');
 		rdbtnL.setActionCommand("L");
-		rdbtnL.setBounds(75, 31, 43, 23);
-		drinksPanel.add(rdbtnL);
+		drinksPanel.add(rdbtnL, "grow, split 3");
 		btngrpSize.add(rdbtnL);
 		
 		rdbtnM = new JRadioButton("M");
 		rdbtnM.setMnemonic('M');
 		rdbtnM.setActionCommand("M");
-		rdbtnM.setBounds(120, 31, 47, 23);
-		drinksPanel.add(rdbtnM);
+		drinksPanel.add(rdbtnM, "grow");
 		btngrpSize.add(rdbtnM);
 		
 		rdbtnS = new JRadioButton("S");
 		rdbtnS.setMnemonic('S');
 		rdbtnS.setActionCommand("S");
-		rdbtnS.setBounds(169, 31, 47, 23);
-		drinksPanel.add(rdbtnS);
+		drinksPanel.add(rdbtnS, "grow");
 		btngrpSize.add(rdbtnS);
 		
 		btnAddDrinkToCart = new JButton("Add to cart");
@@ -431,8 +417,7 @@ public class POS extends JFrame {
 			}
 		});
 				
-		btnAddDrinkToCart.setBounds(509, 10, 106, 35);
-		drinksPanel.add(btnAddDrinkToCart);
+		drinksPanel.add(btnAddDrinkToCart, "cell 3 0 1 3, grow");
 		
 		drinkMenuPanel = new JPanel();
 		
@@ -440,7 +425,6 @@ public class POS extends JFrame {
 		drinkScroll=new JScrollPane(drinkMenuPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
 										, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		drinkScroll.getVerticalScrollBar().setUnitIncrement(16);
-		drinkScroll.setBounds(0, 55, 625, 406);
-		drinksPanel.add(drinkScroll);
+		drinksPanel.add(drinkScroll, "cell 0 3 4 1, grow");
 	}
 }
