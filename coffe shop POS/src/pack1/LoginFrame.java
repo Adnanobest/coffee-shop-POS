@@ -29,7 +29,7 @@ public class LoginFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoginFrame frame = new LoginFrame(null, null);
+					LoginFrame frame = new LoginFrame(null, null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,9 +40,10 @@ public class LoginFrame extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param pos 
 	 * @param menu 
 	 */
-	public LoginFrame(ArrayList<Drink> menuDrink, ArrayList<Dessert> menuDessert) {
+	public LoginFrame(ArrayList<Drink> menuDrink, ArrayList<Dessert> menuDessert, POS pos) {
 		setResizable(false);
 		Admin admin = new Admin("", "");
 		
@@ -85,7 +86,7 @@ public class LoginFrame extends JFrame {
 				String password = textPassword.getText();
 				
 				if(admin.username.equals(username)&&admin.password.equals(password)) {
-					ManagmentFrame managment = new ManagmentFrame(menuDrink, menuDessert);
+					ManagmentFrame managment = new ManagmentFrame(menuDrink, menuDessert, pos);
 					managment.setVisible(true);
 					dispose();
 				}

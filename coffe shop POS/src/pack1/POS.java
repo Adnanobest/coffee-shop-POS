@@ -20,6 +20,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
+import net.miginfocom.swing.MigLayout;
 
 public class POS extends JFrame {
 	
@@ -33,7 +34,7 @@ public class POS extends JFrame {
 		}
 	}
 	
-	static ActionListener drinkBtnActionListener(Drink drink, JButton btndrink) {
+	ActionListener drinkBtnActionListener(Drink drink, JButton btndrink) {
 		return new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				selectedButton=btndrink;
@@ -58,7 +59,7 @@ public class POS extends JFrame {
 		};
 	}
 
-	static void removeButton(String x, int z) {
+	void removeButton(String x, int z) {
 		if (z==0) {
 			for (JButton y : drinkButtons) {
 				if (y.getText().equals(x)) {
@@ -78,7 +79,7 @@ public class POS extends JFrame {
 		}
 	}
 	
-	static void addDrink(String name, Double price, String horc) {
+	void addDrink(String name, Double price, String horc) {
 		Drink drink = new Drink(name,price,horc);
 		drinks.add(drink);
 		
@@ -89,7 +90,7 @@ public class POS extends JFrame {
 		resetDrinks();
 	}
 	
-	static void resetDrinks() {
+	void resetDrinks() {
 		drinkMenuPanel.removeAll();
 		drinkMenuPanel.repaint();
 		
@@ -114,7 +115,7 @@ public class POS extends JFrame {
 		drinkMenuPanel.setPreferredSize(new Dimension(625, height+70));
 	}
 
-	static void addDesserts(String name, Double price) {
+	void addDesserts(String name, Double price) {
 		desserts.add(new Dessert(name,price));
 
 		JButton dessert = new JButton(name);
@@ -132,7 +133,7 @@ public class POS extends JFrame {
 		resetDesserts();
 	}
 	
-	static void resetDesserts() {
+	void resetDesserts() {
 		dessertMenuPanel.removeAll();
 		dessertMenuPanel.repaint();
 		
@@ -156,45 +157,45 @@ public class POS extends JFrame {
 			dessertMenuPanel.setPreferredSize(new Dimension(dessertsPanel.getWidth(), height+75));
 		}
 	}
-	
+
 	private static final long serialVersionUID = 1L;
-	private static JPanel contentPane;
-	private static JPanel panel;
-	private static JPanel drinksPanel;
-	private static JPanel drinkMenuPanel;
-	private static JPanel dessertsPanel;
-	private static JPanel totalPanel;
-	private static JScrollPane drinkScroll;
-	private static JLabel lblHorC;
-	private static ButtonGroup btngrpHorC;
-	private static JRadioButton rdbtnHot;
-	private static JRadioButton rdbtnCold;
-	private static JLabel lblSize;
-	private static ButtonGroup btngrpSize;
-	private static JRadioButton rdbtnL;
-	private static JRadioButton rdbtnM;
-	private static JRadioButton rdbtnS;
-	private static JButton selectedButton = null;
-	static JLabel lblTotal;
-	static double total;
-	static ArrayList<Object> cart = new ArrayList<Object>(0);
-	static JList<String> list;
-	static ArrayList<Drink> drinks = new ArrayList<Drink>(0);
-	static ArrayList<Dessert> desserts = new ArrayList<Dessert>(0);
-	static ArrayList<JButton> drinkButtons = new ArrayList<JButton>(0);
-	static ArrayList<JButton> dessertButtons = new ArrayList<JButton>(0);
-	static int btnWidth=85;
+	private JPanel contentPane;
+	private JPanel panel;
+	private JPanel drinksPanel;
+	private JPanel drinkMenuPanel;
+	private JPanel dessertsPanel;
+	private JPanel totalPanel;
+	private JScrollPane drinkScroll;
+	private JLabel lblHorC;
+	private ButtonGroup btngrpHorC;
+	private JRadioButton rdbtnHot;
+	private JRadioButton rdbtnCold;
+	private JLabel lblSize;
+	private ButtonGroup btngrpSize;
+	private JRadioButton rdbtnL;
+	private JRadioButton rdbtnM;
+	private JRadioButton rdbtnS;
+	private JButton selectedButton = null;
+	JLabel lblTotal;
+	double total;
+	ArrayList<Object> cart = new ArrayList<Object>(0);
+	JList<String> list;
+	ArrayList<Drink> drinks = new ArrayList<Drink>(0);
+	ArrayList<Dessert> desserts = new ArrayList<Dessert>(0);
+	ArrayList<JButton> drinkButtons = new ArrayList<JButton>(0);
+	ArrayList<JButton> dessertButtons = new ArrayList<JButton>(0);
+	int btnWidth=85;
 	JButton btnRefresh;
-	static int spc=24;
-	static int height= 5;
-	private static JButton btnAddDrinkToCart;
-	private static DefaultListModel<String> listModel= new DefaultListModel<>();
-	static DecimalFormat df = new DecimalFormat("#.##");
+	int spc=24;
+	int height= 5;
+	private JButton btnAddDrinkToCart;
+	private DefaultListModel<String> listModel= new DefaultListModel<>();
+	DecimalFormat df = new DecimalFormat("#.##");
 	private JLabel lblDrink;
 	private JLabel lblDessert;
 	private JScrollPane cartScroll;
-	private static JPanel dessertMenuPanel;
-	private static JScrollPane dessertScroll;
+	private JPanel dessertMenuPanel;
+	private JScrollPane dessertScroll;
 	Font font = new Font("Tahoma", Font.PLAIN, 13);
 	private JLabel lblCart;
 
@@ -217,30 +218,24 @@ public class POS extends JFrame {
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(100, 100, 1016, 500);
 		setMinimumSize(new Dimension(999, 500));
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane = new JPanel(new MigLayout("debug, fill, insets 0, hidemode 3", "[12.5%][62.5%][25%]", "[]"));
+
 
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
 		
 		panel = new JPanel();
-		panel.setBounds(0, 0, 125, 461);
-		contentPane.add(panel);
+		contentPane.add(panel, "grow");
 
 		drinksPanel = new JPanel();
-		drinksPanel.setBounds(125, 0, 625, 461);
-		contentPane.add(drinksPanel);
-		drinksPanel.setVisible(false);
+		contentPane.add(drinksPanel, "cell 1 0,grow");
 
 		dessertsPanel = new JPanel();
-		dessertsPanel.setBounds(125, 0, 625, 461);
-		contentPane.add(dessertsPanel);
+		contentPane.add(dessertsPanel, "cell 1 0,grow");
 		
 		totalPanel = new JPanel();
-		totalPanel.setBounds(750, 0, 250, 461);
-		contentPane.add(totalPanel);
+		contentPane.add(totalPanel, "cell 2 0,grow");
 
-		setPanel();
+		setPanel(this);
 
 		setDrinksPane();
 
@@ -272,15 +267,14 @@ public class POS extends JFrame {
 	}
 
 	private void setTotalPanel() {
-		totalPanel.setLayout(null);
+		totalPanel.setLayout(new MigLayout("debug, wrap 1, fill", "[]", "[85%][]"));
 		
 		
 		list = new JList<String>();
 		
 		cartScroll = new JScrollPane(list, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
 											 , ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		cartScroll.setBounds(0, 0, 250, 417);
-		totalPanel.add(cartScroll);
+		totalPanel.add(cartScroll, "grow");
 		
 		lblCart = new JLabel("Items in cart:");
 		lblCart.setFont(font);
@@ -288,8 +282,7 @@ public class POS extends JFrame {
 
 		lblTotal = new JLabel("Total: 0");
 		lblTotal.setFont(font);
-		lblTotal.setBounds(10, 428, 115, 14);
-		totalPanel.add(lblTotal);
+		totalPanel.add(lblTotal, "grow, split");
 		
 		JButton btnRemove = new JButton("Remove item");
 		btnRemove.setFont(font);
@@ -306,11 +299,10 @@ public class POS extends JFrame {
 				list.setModel(listModel);
 			}
 		});
-		btnRemove.setBounds(125, 420, 120, 30);
-		totalPanel.add(btnRemove);
+		totalPanel.add(btnRemove, "grow");
 	}
 
-	private void setPanel() {
+	private void setPanel(POS pos) {
 		panel.setLayout(null);
 		
 		JButton btnDrinks = new JButton("Drinks");
@@ -337,14 +329,14 @@ public class POS extends JFrame {
 		});
 		panel.add(btnDesserts);
 		
-				JButton btnAdmin = new JButton("Admin");
-				btnAdmin.setBounds(14, 415, 97, 35);
-				panel.add(btnAdmin);
-				btnAdmin.setFont(font);
-				btnAdmin.setMnemonic('N');
-				btnAdmin.addActionListener(new ActionListener() {
+		JButton btnAdmin = new JButton("Admin");
+		btnAdmin.setBounds(14, 415, 97, 35);
+		panel.add(btnAdmin);
+		btnAdmin.setFont(font);
+		btnAdmin.setMnemonic('N');
+		btnAdmin.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						LoginFrame x = new LoginFrame(drinks, desserts);
+						LoginFrame x = new LoginFrame(drinks, desserts, pos);
 						x.setVisible(true);
 					}
 				});
