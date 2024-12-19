@@ -1,6 +1,5 @@
 package pack1;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -20,9 +19,15 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.border.MatteBorder;
+import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import javax.swing.event.AncestorListener;
+import javax.swing.event.AncestorEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
 
 public class POS extends JFrame {
 	
@@ -81,32 +86,6 @@ public class POS extends JFrame {
 		}
 	}
 	
-	void addDrink(String name, Double price, String horc) {
-		Drink drink = new Drink(name,price,horc);
-		drinks.add(drink);
-		
-		JButton btndrink = new JButton(name);
-		btndrink.addActionListener(drinkBtnActionListener(drink, btndrink));
-		drinkButtons.add(btndrink);
-		btndrink.setToolTipText(price.toString());
-		resetDrinks();
-	}
-	
-	void resetDrinks() {
-		drinkMenuPanel.removeAll();
-		drinkMenuPanel.repaint();
-		
-		if (drinkButtons.isEmpty()) {
-			return;
-		}
-		int i=0;
-		for (JButton button: drinkButtons) {
-			button.setToolTipText(drinks.get(i++).getPrice().toString());
-			drinkMenuPanel.add(button, "grow");
-		}
-		//drinkMenuPanel.setPreferredSize(new Dimension(625, height+70));
-	}
-
 	void addDesserts(String name, Double price) {
 		desserts.add(new Dessert(name,price));
 
@@ -126,27 +105,19 @@ public class POS extends JFrame {
 	}
 	
 	void resetDesserts() {
+		String h = Integer.toString(dessertScroll.getHeight()/7);
+		((MigLayout) dessertMenuPanel.getLayout()).setRowConstraints(h+"!");
+
 		dessertMenuPanel.removeAll();
 		dessertMenuPanel.repaint();
 		
-		btnWidth=drinkScroll.getWidth()/7;
-		spc=btnWidth/7;
-
 		if (dessertButtons.isEmpty()) {
 			return;
 		}
-		int pos=spc;
 		int i=0;
-		height=20;		
-		for (JButton x : dessertButtons) {
-			if(i!=0 && i%6 == 0) {
-				pos=spc;
-				height+=70;
-			} i++;
-			dessertMenuPanel.add(x);
-			x.setBounds(pos, height, btnWidth, 50);
-			pos+=btnWidth+spc;
-			dessertMenuPanel.setPreferredSize(new Dimension(dessertsPanel.getWidth(), height+75));
+		for (JButton button : dessertButtons) {
+			button.setToolTipText(desserts.get(i++).getPrice().toString());
+			dessertMenuPanel.add(button, "grow");
 		}
 	}
 
@@ -176,10 +147,7 @@ public class POS extends JFrame {
 	ArrayList<Dessert> desserts = new ArrayList<Dessert>(0);
 	ArrayList<JButton> drinkButtons = new ArrayList<JButton>(0);
 	ArrayList<JButton> dessertButtons = new ArrayList<JButton>(0);
-	int btnWidth=85;
 	JButton btnRefresh;
-	int spc=24;
-	int height= 5;
 	private JButton btnAddDrinkToCart;
 	private DefaultListModel<String> listModel= new DefaultListModel<>();
 	DecimalFormat df = new DecimalFormat("#.##");
@@ -205,13 +173,11 @@ public class POS extends JFrame {
 	}
 
 	public POS() {
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(100, 100, 1016, 500);
 		setMinimumSize(new Dimension(999, 500));
-		contentPane = new JPanel(new MigLayout("debug, fill, insets 0, hidemode 3", "[:12.5%:250][62.5%][25%]", "[]"));
-
+		contentPane = new JPanel(new MigLayout("debug, fill, insets 0 , hidemode 3", "[:12.5%:250][62.5%][25%]", "[]"));
 
 		setContentPane(contentPane);
 		
@@ -241,102 +207,8 @@ public class POS extends JFrame {
 		}
 	}
 
-	private void setDessertPanel() {
-		dessertsPanel.setLayout(new MigLayout("debug, fill, insets 0", "", ""));
-		dessertsPanel.setVisible(false);
-		
-		dessertMenuPanel = new JPanel();
-		dessertMenuPanel.setLayout(new MigLayout("debug, fill, insets 0, wrap 6", "", ""));
-		
-		dessertScroll = new JScrollPane(dessertMenuPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
-										, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		dessertScroll.getVerticalScrollBar().setUnitIncrement(16);
-		dessertsPanel.add(dessertScroll, "grow");
-		
-		dessertMenuPanel.add(new JButton("ddd"), "grow");
-		lblDessert = new JLabel("Click on   the selected dessert");
-		dessertScroll.setColumnHeaderView(lblDessert);
-
-	}
-
-	private void setTotalPanel() {
-		totalPanel.setLayout(new MigLayout("debug, wrap 1, fill", "[]", "[85%][]"));
-		
-		
-		list = new JList<String>();
-		
-		cartScroll = new JScrollPane(list, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
-											 , ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		totalPanel.add(cartScroll, "grow");
-		
-		lblCart = new JLabel("Items in cart:");
-		lblCart.setFont(font);
-		cartScroll.setColumnHeaderView(lblCart);
-
-		lblTotal = new JLabel("Total: 0");
-		lblTotal.setFont(font);
-		totalPanel.add(lblTotal, "grow, split");
-		
-		JButton btnRemove = new JButton("Remove item");
-		btnRemove.setFont(font);
-		btnRemove.setMnemonic('V');
-		btnRemove.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (list.getSelectedValue()==null) {
-					JOptionPane.showMessageDialog(contentPane, "Select an item to remove");
-					return;
-				}
-				total -= Double.parseDouble(list.getSelectedValue().split(",")[1]);
-				listModel.remove(list.getSelectedIndex());
-				lblTotal.setText("Total: "+ df.format(total));
-				list.setModel(listModel);
-			}
-		});
-		totalPanel.add(btnRemove, "grow");
-	}
-
-	private void setPanel(POS pos) {
-		panel.setLayout(null);
-		
-		JButton btnDrinks = new JButton("Drinks");
-		btnDrinks.setFont(font);
-		btnDrinks.setMnemonic('K');
-		btnDrinks.setBounds(14, 11, 97, 35);
-		btnDrinks.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dessertsPanel.setVisible(false);
-				drinksPanel.setVisible(true);
-			}
-		});
-		panel.add(btnDrinks);
-		
-		JButton btnDesserts = new JButton("Desserts");
-		btnDesserts.setFont(font);
-		btnDesserts.setMnemonic('R');
-		btnDesserts.setBounds(14, 57, 97, 35);
-		btnDesserts.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				drinksPanel.setVisible(false);
-				dessertsPanel.setVisible(true);
-			}
-		});
-		panel.add(btnDesserts);
-		
-		JButton btnAdmin = new JButton("Admin");
-		btnAdmin.setBounds(14, 415, 97, 35);
-		panel.add(btnAdmin);
-		btnAdmin.setFont(font);
-		btnAdmin.setMnemonic('N');
-		btnAdmin.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						LoginFrame x = new LoginFrame(drinks, desserts, pos);
-						x.setVisible(true);
-					}
-				});
-	}
-
 	private void setDrinksPane() {
-		drinksPanel.setLayout(new MigLayout("debug, fill, insets 5", "", "[5%!][5%!][5%!][]"));
+		drinksPanel.setLayout(new MigLayout("debug, fill, insets 0", "", "[3%!]2[5%!]2[5%!]2[]"));
 		drinksPanel.setVisible(false);
 		
 		btngrpHorC = new ButtonGroup();
@@ -416,15 +288,149 @@ public class POS extends JFrame {
 				}
 			}
 		});
-				
-		drinksPanel.add(btnAddDrinkToCart, "cell 3 0 1 3, grow");
+		drinksPanel.add(btnAddDrinkToCart, "cell 3 0 1 3, grow, gap 5 5 5 5");
 		
-		drinkMenuPanel = new JPanel();
-		
-		drinkMenuPanel.setLayout(null);
+		drinkMenuPanel = new JPanel(new MigLayout("debug, fill, ins 0 0 5 5, wrap 6", "[]", "[]"));
 		drinkScroll=new JScrollPane(drinkMenuPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
 										, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		drinkScroll.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				resetDrinks();
+			}
+		});
 		drinkScroll.getVerticalScrollBar().setUnitIncrement(16);
+		
 		drinksPanel.add(drinkScroll, "cell 0 3 4 1, grow");
+		
 	}
+
+	void addDrink(String name, Double price, String horc) {
+		Drink drink = new Drink(name,price,horc);
+		drinks.add(drink);
+		
+		JButton btndrink = new JButton(name);
+		btndrink.addActionListener(drinkBtnActionListener(drink, btndrink));
+		drinkButtons.add(btndrink);
+		btndrink.setToolTipText(price.toString());
+		resetDrinks();
+	}
+	
+	void resetDrinks() {
+		String h = Integer.toString(drinkScroll.getHeight()/6);
+		((MigLayout) drinkMenuPanel.getLayout()).setRowConstraints(h+"!");
+
+		drinkMenuPanel.removeAll();
+		drinkMenuPanel.repaint();
+		
+		if (drinkButtons.isEmpty()) {
+			return;
+		}
+
+		int i=0;
+		for (JButton button: drinkButtons) {
+			button.setToolTipText(drinks.get(i++).getPrice().toString());
+			drinkMenuPanel.add(button, "grow");
+		}
+	}
+
+	private void setDessertPanel() {
+		dessertsPanel.setLayout(new MigLayout("debug, fill, insets 0", "", ""));
+		dessertsPanel.setVisible(false);
+		
+		dessertMenuPanel = new JPanel(new MigLayout("debug, fill, insets 0, wrap 6", "", ""));
+		
+		dessertScroll = new JScrollPane(dessertMenuPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
+										, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		dessertScroll.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				resetDesserts();
+			}
+		});
+		dessertScroll.getVerticalScrollBar().setUnitIncrement(16);
+		dessertsPanel.add(dessertScroll, "grow");
+		
+		lblDessert = new JLabel("Click on   the selected dessert");
+		dessertScroll.setColumnHeaderView(lblDessert);
+	}
+	
+	private void setTotalPanel() {
+		totalPanel.setLayout(new MigLayout("debug, wrap 1, fill", "[]", "[85%][]"));
+		
+		
+		list = new JList<String>();
+		
+		cartScroll = new JScrollPane(list, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
+											 , ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		totalPanel.add(cartScroll, "grow");
+		
+		lblCart = new JLabel("Items in cart:");
+		lblCart.setFont(font);
+		cartScroll.setColumnHeaderView(lblCart);
+
+		lblTotal = new JLabel("Total: 0");
+		lblTotal.setFont(font);
+		totalPanel.add(lblTotal, "grow, split");
+		
+		JButton btnRemove = new JButton("Remove item");
+		btnRemove.setFont(font);
+		btnRemove.setMnemonic('V');
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (list.getSelectedValue()==null) {
+					JOptionPane.showMessageDialog(contentPane, "Select an item to remove");
+					return;
+				}
+				total -= Double.parseDouble(list.getSelectedValue().split(",")[1]);
+				listModel.remove(list.getSelectedIndex());
+				lblTotal.setText("Total: "+ df.format(total));
+				list.setModel(listModel);
+			}
+		});
+		totalPanel.add(btnRemove, "grow");
+	}
+
+	private void setPanel(POS pos) {
+		panel.setLayout(null);
+		
+		JButton btnDrinks = new JButton("Drinks");
+		btnDrinks.setFont(font);
+		btnDrinks.setMnemonic('K');
+		btnDrinks.setBounds(14, 11, 97, 35);
+		btnDrinks.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dessertsPanel.setVisible(false);
+				drinksPanel.setVisible(true);
+				resetDrinks();
+			}
+		});
+		panel.add(btnDrinks);
+		
+		JButton btnDesserts = new JButton("Desserts");
+		btnDesserts.setFont(font);
+		btnDesserts.setMnemonic('R');
+		btnDesserts.setBounds(14, 57, 97, 35);
+		btnDesserts.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				drinksPanel.setVisible(false);
+				dessertsPanel.setVisible(true);
+				resetDesserts();
+			}
+		});
+		panel.add(btnDesserts);
+		
+		JButton btnAdmin = new JButton("Admin");
+		btnAdmin.setBounds(14, 415, 97, 35);
+		panel.add(btnAdmin);
+		btnAdmin.setFont(font);
+		btnAdmin.setMnemonic('N');
+		btnAdmin.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						LoginFrame x = new LoginFrame(drinks, desserts, pos);
+						x.setVisible(true);
+					}
+				});
+	}
+
 }
