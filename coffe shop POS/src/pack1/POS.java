@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -19,15 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.AncestorEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowAdapter;
 
 public class POS extends JFrame {
 	
@@ -174,10 +169,10 @@ public class POS extends JFrame {
 
 	public POS() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setBounds(100, 100, 1016, 500);
 		setMinimumSize(new Dimension(999, 500));
-		contentPane = new JPanel(new MigLayout("debug, fill, insets 0 , hidemode 3", "[:12.5%:250][62.5%][25%]", "[]"));
+		contentPane = new JPanel(new MigLayout("fill, insets 0 , hidemode 3", "[:12.5%:250][62.5%][25%]", "[]"));
 
 		setContentPane(contentPane);
 		
@@ -208,7 +203,7 @@ public class POS extends JFrame {
 	}
 
 	private void setDrinksPane() {
-		drinksPanel.setLayout(new MigLayout("debug, fill, insets 0", "", "[3%!]2[5%!]2[5%!]2[]"));
+		drinksPanel.setLayout(new MigLayout("fill, insets 0", "", "[3%!]2[5%!]2[5%!]2[]"));
 		drinksPanel.setVisible(false);
 		
 		btngrpHorC = new ButtonGroup();
@@ -290,7 +285,7 @@ public class POS extends JFrame {
 		});
 		drinksPanel.add(btnAddDrinkToCart, "cell 3 0 1 3, grow, gap 5 5 5 5");
 		
-		drinkMenuPanel = new JPanel(new MigLayout("debug, fill, ins 0 0 5 5, wrap 6", "[]", "[]"));
+		drinkMenuPanel = new JPanel(new MigLayout("fill, ins 0 0 5 5, wrap 6", "[]", "[]"));
 		drinkScroll=new JScrollPane(drinkMenuPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
 										, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		drinkScroll.addComponentListener(new ComponentAdapter() {
@@ -335,10 +330,10 @@ public class POS extends JFrame {
 	}
 
 	private void setDessertPanel() {
-		dessertsPanel.setLayout(new MigLayout("debug, fill, insets 0", "", ""));
+		dessertsPanel.setLayout(new MigLayout("fill, insets 0", "", ""));
 		dessertsPanel.setVisible(false);
 		
-		dessertMenuPanel = new JPanel(new MigLayout("debug, fill, insets 0, wrap 6", "", ""));
+		dessertMenuPanel = new JPanel(new MigLayout("fill, insets 0, wrap 6", "", ""));
 		
 		dessertScroll = new JScrollPane(dessertMenuPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
 										, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -356,22 +351,46 @@ public class POS extends JFrame {
 	}
 	
 	private void setTotalPanel() {
-		totalPanel.setLayout(new MigLayout("debug, wrap 1, fill", "[]", "[85%][]"));
+		totalPanel.setLayout(new MigLayout("fill, insets 0", "[50%][50%]", "[85%]0[:4%:25]0[]"));
 		
 		
 		list = new JList<String>();
 		
 		cartScroll = new JScrollPane(list, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
 											 , ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		totalPanel.add(cartScroll, "grow");
+		totalPanel.add(cartScroll, "cell 0 0 2 1,grow");
 		
 		lblCart = new JLabel("Items in cart:");
 		lblCart.setFont(font);
 		cartScroll.setColumnHeaderView(lblCart);
-
+		
 		lblTotal = new JLabel("Total: 0");
 		lblTotal.setFont(font);
-		totalPanel.add(lblTotal, "grow, split");
+		totalPanel.add(lblTotal, "cell 0 1 2 1,grow");
+		
+		JButton btnPay = new JButton("Pay");
+		btnPay.setFont(font);
+		btnPay.setMnemonic('P');
+		btnPay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (total==0) {
+					JOptionPane.showMessageDialog(contentPane, "The cart is empty");
+					return;
+				}
+				double paid = Double.parseDouble(JOptionPane.showInputDialog(contentPane, "Enter the paid amount: "));
+				if(paid<total) {
+					JOptionPane.showMessageDialog(contentPane, "Paid amount is less than the total");
+				}
+				else {
+					double remainder = paid - total;
+					JOptionPane.showMessageDialog(contentPane, "The remainder is: "+remainder);
+					listModel.removeAllElements();
+					total = 0;
+					lblTotal.setText("Total: 0");
+				}
+			}
+		});
+		totalPanel.add(btnPay, "cell 0 2,grow");
 		
 		JButton btnRemove = new JButton("Remove item");
 		btnRemove.setFont(font);
@@ -388,16 +407,16 @@ public class POS extends JFrame {
 				list.setModel(listModel);
 			}
 		});
-		totalPanel.add(btnRemove, "grow");
+		totalPanel.add(btnRemove, "cell 1 2,grow");
+
 	}
 
 	private void setPanel(POS pos) {
-		panel.setLayout(null);
+		panel.setLayout(new MigLayout("fill, wrap 1, insets 10", "", "12.5%"));
 		
 		JButton btnDrinks = new JButton("Drinks");
 		btnDrinks.setFont(font);
 		btnDrinks.setMnemonic('K');
-		btnDrinks.setBounds(14, 11, 97, 35);
 		btnDrinks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dessertsPanel.setVisible(false);
@@ -405,12 +424,11 @@ public class POS extends JFrame {
 				resetDrinks();
 			}
 		});
-		panel.add(btnDrinks);
+		panel.add(btnDrinks, "grow");
 		
 		JButton btnDesserts = new JButton("Desserts");
 		btnDesserts.setFont(font);
 		btnDesserts.setMnemonic('R');
-		btnDesserts.setBounds(14, 57, 97, 35);
 		btnDesserts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				drinksPanel.setVisible(false);
@@ -418,11 +436,10 @@ public class POS extends JFrame {
 				resetDesserts();
 			}
 		});
-		panel.add(btnDesserts);
+		panel.add(btnDesserts, "grow");
 		
 		JButton btnAdmin = new JButton("Admin");
-		btnAdmin.setBounds(14, 415, 97, 35);
-		panel.add(btnAdmin);
+		panel.add(btnAdmin, "cell 0 8, grow");
 		btnAdmin.setFont(font);
 		btnAdmin.setMnemonic('N');
 		btnAdmin.addActionListener(new ActionListener() {

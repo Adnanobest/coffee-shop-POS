@@ -52,7 +52,6 @@ public class LoginFrame extends JFrame {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -82,11 +81,10 @@ public class LoginFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				String username = textUser.getText();
-				@SuppressWarnings("deprecation")
-				String password = textPassword.getText();
+				String password = new String(textPassword.getPassword());
 				
 				if(admin.username.equals(username)&&admin.password.equals(password)) {
-					ManagmentFrame managment = new ManagmentFrame(menuDrink, menuDessert, pos);
+					ManagmentFrame managment = new ManagmentFrame(pos);
 					managment.setVisible(true);
 					dispose();
 				}

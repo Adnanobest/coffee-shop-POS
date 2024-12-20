@@ -1,6 +1,7 @@
 package pack1;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -45,7 +46,7 @@ public class ManagmentFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ManagmentFrame frame = new ManagmentFrame(null, null, null);
+					ManagmentFrame frame = new ManagmentFrame(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -54,18 +55,19 @@ public class ManagmentFrame extends JFrame {
 		});
 	}
 
-	public ManagmentFrame(ArrayList<Drink> drinksAL, ArrayList<Dessert> dessertsAL, POS pos) {
+	public ManagmentFrame(POS pos) {
 		this.pos=pos;
 		setTitle("Management");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 576, 350);
+		setMinimumSize(new Dimension(450, 275));
 
 		contentPane = new JPanel(
 				new MigLayout("fill, insets 0 0, gap 0 0, hidemode 3", "[:20%:200]3[40%]3[40%]", "[]"));
 		setContentPane(contentPane);
-
-		drinks = drinksAL;
-		desserts = dessertsAL;
+		
+		drinks = pos.drinks;
+		desserts = pos.desserts;
 
 		addPane = new JPanel();
 		contentPane.add(addPane, "grow");
