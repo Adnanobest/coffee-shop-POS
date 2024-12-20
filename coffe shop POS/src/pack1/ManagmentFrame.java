@@ -34,10 +34,10 @@ public class ManagmentFrame extends JFrame {
 	JList<String> list;
 	ArrayList<Drink> drinks;
 	ArrayList<Dessert> desserts;
-	JPanel addPane;
-	JPanel addDrinkPane;
-	JPanel addDessertPane;
-	JPanel listPane;
+	JPanel panel;
+	JPanel addDrinkPanel;
+	JPanel addDessertPanel;
+	JPanel listPanel;
 	POS pos;
 
 	Font font = new Font("Tahoma", Font.PLAIN, 13);
@@ -69,21 +69,21 @@ public class ManagmentFrame extends JFrame {
 		drinks = pos.drinks;
 		desserts = pos.desserts;
 
-		addPane = new JPanel();
-		contentPane.add(addPane, "grow");
+		panel = new JPanel();
+		contentPane.add(panel, "grow");
 
-		addDrinkPane = new JPanel();
-		addDrinkPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		contentPane.add(addDrinkPane, "grow");
-		addDrinkPane.setVisible(false);
+		addDrinkPanel = new JPanel();
+		addDrinkPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		contentPane.add(addDrinkPanel, "grow");
+		addDrinkPanel.setVisible(false);
 
-		addDessertPane = new JPanel();
-		addDessertPane.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		contentPane.add(addDessertPane, "cell 1 0, grow");
-		addDessertPane.setVisible(false);
+		addDessertPanel = new JPanel();
+		addDessertPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		contentPane.add(addDessertPanel, "cell 1 0, grow");
+		addDessertPanel.setVisible(false);
 
-		listPane = new JPanel();
-		contentPane.add(listPane, "cell 2 0, grow");
+		listPanel = new JPanel();
+		contentPane.add(listPanel, "cell 2 0, grow");
 
 		addPane();
 
@@ -129,41 +129,41 @@ public class ManagmentFrame extends JFrame {
 	}
 
 	private void addPane() {
-		addPane.setLayout(new MigLayout("wrap 1, fill, insets 5", "center", "[33%][][][33%]"));
+		panel.setLayout(new MigLayout("wrap 1, fill, insets 5", "center", "[33%][][][33%]"));
 
 		JButton btnAddDrink = new JButton("add drink");
 		btnAddDrink.setMnemonic('K');
 		btnAddDrink.setFont(font);
-		addPane.add(btnAddDrink, "cell 0 1, grow");
+		panel.add(btnAddDrink, "cell 0 1, grow");
 		btnAddDrink.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addDessertPane.setVisible(false);
-				addDrinkPane.setVisible(true);
+				addDessertPanel.setVisible(false);
+				addDrinkPanel.setVisible(true);
 			}
 		});
 
 		JButton btnAddDessert = new JButton("add dessert");
 		btnAddDessert.setMnemonic('R');
 		btnAddDessert.setFont(font);
-		addPane.add(btnAddDessert, "cell 0 2, grow");
+		panel.add(btnAddDessert, "cell 0 2, grow");
 		btnAddDessert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addDrinkPane.setVisible(false);
-				addDessertPane.setVisible(true);
+				addDrinkPanel.setVisible(false);
+				addDessertPanel.setVisible(true);
 			}
 		});
 	}
 
 	private void listPane() {
-		listPane.setLayout(new MigLayout("wrap 1, fill, insets 0 0, gap 0 0", "[]", "[80%][15:5%][]"));
+		listPanel.setLayout(new MigLayout("wrap 1, fill, insets 0 0, gap 0 0", "[]", "[80%][15:5%][]"));
 
 		list = new JList<String>(listModel);
 		JScrollPane scroll = new JScrollPane(list);
 
-		listPane.add(scroll, "grow");
+		listPanel.add(scroll, "grow");
 
 		JLabel lblSelected = new JLabel("for selected item:");
-		listPane.add(lblSelected, "gapx 5");
+		listPanel.add(lblSelected, "gapx 5");
 
 		JButton btnChangePrice = new JButton("<html><p style='text-align:center;'>Change<br>Price</p>");
 		btnChangePrice.setMnemonic('G');
@@ -174,7 +174,7 @@ public class ManagmentFrame extends JFrame {
 			}
 		});
 		btnChangePrice.setFont(font);
-		listPane.add(btnChangePrice, "split 2, grow, gapx 5");
+		listPanel.add(btnChangePrice, "split 2, grow, gapx 5");
 
 		JButton btnRemove = new JButton("Remove");
 		btnRemove.setMnemonic('V');
@@ -185,52 +185,52 @@ public class ManagmentFrame extends JFrame {
 			}
 		});
 		btnRemove.setFont(font);
-		listPane.add(btnRemove, "grow, gapx 5:2.5% 5");
+		listPanel.add(btnRemove, "grow, gapx 5:2.5% 5");
 
 	}
 
 	private void addDrinkPane() {
-		addDrinkPane.setLayout(new MigLayout("wrap 1, fill, insets 10", "center", ""));
+		addDrinkPanel.setLayout(new MigLayout("wrap 1, fill, insets 10", "center", ""));
 
 		JLabel lblDrinkName = new JLabel("Drink name:", JLabel.CENTER);
 		lblDrinkName.setFont(font);
 		lblDrinkName.setDisplayedMnemonic('N');
-		addDrinkPane.add(lblDrinkName);
+		addDrinkPanel.add(lblDrinkName);
 
 		txtDrinkName = new JTextField(1000);
-		addDrinkPane.add(txtDrinkName);
+		addDrinkPanel.add(txtDrinkName);
 
 		lblDrinkName.setLabelFor(txtDrinkName);
 
 		JLabel lblDrinkPrice = new JLabel("Price for size M:", JLabel.CENTER);
 		lblDrinkPrice.setFont(font);
 		lblDrinkPrice.setDisplayedMnemonic('P');
-		addDrinkPane.add(lblDrinkPrice);
+		addDrinkPanel.add(lblDrinkPrice);
 
 		txtDrinkPrice = new JTextField(1000);
-		addDrinkPane.add(txtDrinkPrice);
+		addDrinkPanel.add(txtDrinkPrice);
 
 		lblDrinkPrice.setLabelFor(txtDrinkPrice);
 
 		JLabel lblHorC = new JLabel("Hot or cold", JLabel.CENTER);
 		lblHorC.setFont(font);
-		addDrinkPane.add(lblHorC);
+		addDrinkPanel.add(lblHorC);
 
 		JCheckBox chckbxHot = new JCheckBox("Hot");
 		chckbxHot.setFont(font);
-		addDrinkPane.add(chckbxHot, "split 2");
+		addDrinkPanel.add(chckbxHot, "split 2");
 		chckbxHot.setMnemonic('H');
 		chckbxHot.setActionCommand("H");
 
 		JCheckBox chckbxCold = new JCheckBox("Cold");
 		chckbxCold.setMnemonic('C');
 		chckbxCold.setFont(font);
-		addDrinkPane.add(chckbxCold);
+		addDrinkPanel.add(chckbxCold);
 
 		JButton btnSaveDrink = new JButton("Save Drink");
 		btnSaveDrink.setMnemonic('S');
 		btnSaveDrink.setFont(font);
-		addDrinkPane.add(btnSaveDrink, "grow, cell 0 8");
+		addDrinkPanel.add(btnSaveDrink, "grow, cell 0 8");
 		btnSaveDrink.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtDrinkName.getText().equals("")) {
@@ -267,30 +267,30 @@ public class ManagmentFrame extends JFrame {
 	}
 
 	private void addDessertPane() {
-		addDessertPane.setLayout(new MigLayout("wrap 1, fill, insets 10", "center", ""));
+		addDessertPanel.setLayout(new MigLayout("wrap 1, fill, insets 10", "center", ""));
 
 		JLabel lblDessertName = new JLabel("Dessert name:", JLabel.CENTER);
 		lblDessertName.setFont(font);
 		lblDessertName.setDisplayedMnemonic('N');
-		addDessertPane.add(lblDessertName);
+		addDessertPanel.add(lblDessertName);
 
 		txtDessertName = new JTextField(1000);
-		addDessertPane.add(txtDessertName);
+		addDessertPanel.add(txtDessertName);
 		lblDessertName.setLabelFor(txtDessertName);
 
 		JLabel lblDessertPrice = new JLabel("Price:", JLabel.CENTER);
 		lblDessertPrice.setFont(font);
 		lblDessertPrice.setDisplayedMnemonic('P');
-		addDessertPane.add(lblDessertPrice);
+		addDessertPanel.add(lblDessertPrice);
 
 		txtDessertPrice = new JTextField(1000);
-		addDessertPane.add(txtDessertPrice);
+		addDessertPanel.add(txtDessertPrice);
 		lblDessertPrice.setLabelFor(txtDessertPrice);
 
 		JButton btnSaveDessert = new JButton("Save Dessert");
 		btnSaveDessert.setMnemonic('S');
 		btnSaveDessert.setFont(font);
-		addDessertPane.add(btnSaveDessert, "grow, cell 0 10");
+		addDessertPanel.add(btnSaveDessert, "grow, cell 0 10");
 
 		btnSaveDessert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
