@@ -297,33 +297,6 @@ public class POS extends JFrame {
 				int selectedIndex = list.getSelectedIndex();
 				if(selectedIndex != -1) {
 					
-					/*for (Dessert d : desserts) {
-						if(d.name.equals(list.getSelectedValue().split(",")[0])) {
-							total -= d.getPrice();
-							lblTotal.setText("Total: "+total);
-						}
-					}
-					
-					for (Drink d : drinks) {
-						if(d.name.equals(list.getSelectedValue().split(",")[0])){
-							String size = list.getSelectedValue().split(",")[2];
-							double x = 0;
-							
-							if (size.equals(" L")) {
-								x = 1.25;
-							}
-							else if (size.equals(" M")) {
-								x = 1.0;
-							}
-							else if (size.equals(" S")){
-								x = 0.75;
-							}
-							
-							double price = d.getPrice();
-							total -= price*x;
-							lblTotal.setText("Total: "+total);
-						}
-					}*/
 					total -= Double.parseDouble(list.getSelectedValue().split(",")[1]);
 					lblTotal.setText("Total: "+total);
 					listModel.remove(list.getSelectedIndex());
