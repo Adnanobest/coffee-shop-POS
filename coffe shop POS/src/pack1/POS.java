@@ -198,15 +198,20 @@ public class POS extends JFrame {
 					JOptionPane.showMessageDialog(contentPane, "The cart is empty");
 					return;
 				}
-				double paid = Double.parseDouble(JOptionPane.showInputDialog(contentPane, "Enter the paid amount: "));
-				if (paid < total) {
-					JOptionPane.showMessageDialog(contentPane, "Paid amount is less than the total");
-				} else {
-					double remainder = paid - total;
-					JOptionPane.showMessageDialog(contentPane, "The remainder is: " + remainder);
-					listModel.removeAllElements();
-					total = 0;
-					lblTotal.setText("Total: 0");
+				
+				String enteredAmount = JOptionPane.showInputDialog(contentPane, "Enter the paid amount: ");
+				if(isNum(enteredAmount)) {
+					double paid = Double.parseDouble(enteredAmount);
+					if (paid < total) {
+						JOptionPane.showMessageDialog(contentPane, "Paid amount is less than the total");
+					}
+					else {
+						double remainder = paid - total;
+						JOptionPane.showMessageDialog(contentPane, "The remainder is: " + remainder);
+						listModel.removeAllElements();
+						total = 0;
+						lblTotal.setText("Total: 0");
+					}
 				}
 			}
 		});
@@ -432,6 +437,33 @@ public class POS extends JFrame {
 		for (JButton button : dessertButtons) {
 			button.setToolTipText(desserts.get(i++).getPrice().toString());
 			dessertMenuPanel.add(button, "grow");
+		}
+	}
+	
+	public boolean isNum(String str) {
+		int dot = 0;
+		
+		if(str.isEmpty()) {
+			JOptionPane.showMessageDialog(contentPane, "You must enter a number for the price");
+			return false;
+		}
+		else if(str.equals(".")) {
+			JOptionPane.showMessageDialog(contentPane, "price can only be a number");
+			return false;
+		}
+		else {
+			for (char x : str.toCharArray()) {
+				if (x == '.') {
+					if (++dot > 1) {
+						JOptionPane.showMessageDialog(contentPane, "price can only be a number");
+						return false;
+					}
+				} else if (x - '0' < 0 || x - '0' > 9) {
+					JOptionPane.showMessageDialog(contentPane, "price can only be a number");
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 }
