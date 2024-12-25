@@ -95,24 +95,8 @@ public class ManagmentFrame extends JFrame {
 		
 		refresh();
 
-	}
-
-	private boolean isNum(String str) {
-		int dot = 0;
-		for (char x : str.toCharArray()) {
-			if (x == '.') {
-				if (++dot > 1) {
-					JOptionPane.showMessageDialog(contentPane, "price can only be a number");
-					return false;
-				}
-			} else if (x - '0' < 0 || x - '0' > 9) {
-				JOptionPane.showMessageDialog(contentPane, "price can only be a number");
-				return false;
-			}
-		}
-		return true;
-	}
-
+	}	
+	
 	private void refresh() {
 		if (!drinks.isEmpty() || !desserts.isEmpty()) {
 			listModel.clear();
@@ -234,7 +218,7 @@ public class ManagmentFrame extends JFrame {
 		btnSaveDrink.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtDrinkName.getText().equals("")) {
-					if (isNum(txtDrinkPrice.getText())) {
+					if (pos.isNum(txtDrinkPrice.getText())) {
 						if (chckbxHot.isSelected() || chckbxCold.isSelected()) {
 							String name = txtDrinkName.getText();
 							Double price = Double.parseDouble(txtDrinkPrice.getText());
@@ -295,7 +279,7 @@ public class ManagmentFrame extends JFrame {
 		btnSaveDessert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtDessertName.getText().equals("")) {
-					if (isNum(txtDessertPrice.getText())) {
+					if (pos.isNum(txtDessertPrice.getText())) {
 						int exist = alreadyExists(txtDessertName.getText());
 						switch (exist) {
 						case 0:
@@ -371,7 +355,7 @@ public class ManagmentFrame extends JFrame {
 			} else {
 				String selected = list.getSelectedValue().split(",")[0];
 				String str = JOptionPane.showInputDialog(contentPane, "enter new price for " + selected);
-				while (!isNum(str)) {
+				while (!pos.isNum(str)) {
 					str = JOptionPane.showInputDialog(contentPane, "enter new price for " + selected);
 				}
 				double newPrice = Double.parseDouble(str);
