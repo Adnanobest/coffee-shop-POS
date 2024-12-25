@@ -113,19 +113,19 @@ public class POS extends JFrame {
 		}
 	}
 
-	void removeButton(String x, int z) {
-		if (z == 0) {
-			for (JButton y : drinkButtons) {
-				if (y.getText().equals(x)) {
-					drinkButtons.remove(y);
+	void removeButton(String name, int isDessert) {
+		if (isDessert == 0) {
+			for (JButton button : drinkButtons) {
+				if (button.getText().equals(name)) {
+					drinkButtons.remove(button);
 					resetDrinks();
 					break;
 				}
 			}
 		} else {
-			for (JButton y : dessertButtons) {
-				if (y.getText().equals(x)) {
-					dessertButtons.remove(y);
+			for (JButton button : dessertButtons) {
+				if (button.getText().equals(name)) {
+					dessertButtons.remove(button);
 					resetDesserts();
 					break;
 				}
