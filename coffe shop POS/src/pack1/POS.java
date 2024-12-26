@@ -207,7 +207,7 @@ public class POS extends JFrame {
 					}
 					else {
 						double remainder = paid - total;
-						JOptionPane.showMessageDialog(contentPane, "The remainder is: " + remainder);
+						JOptionPane.showMessageDialog(contentPane, "The remainder is: " + df.format(remainder));
 						listModel.removeAllElements();
 						total = 0;
 						lblTotal.setText("Total: 0");
