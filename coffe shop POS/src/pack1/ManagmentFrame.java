@@ -153,6 +153,10 @@ public class ManagmentFrame extends JFrame {
 		btnChangePrice.setMnemonic('G');
 		btnChangePrice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (list.getSelectedValue() == null) {
+					JOptionPane.showMessageDialog(contentPane, "Select an item to change the price");
+					return;
+				}
 				changePrice();
 				refresh();
 			}
@@ -164,6 +168,10 @@ public class ManagmentFrame extends JFrame {
 		btnRemove.setMnemonic('V');
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (list.getSelectedValue() == null) {
+					JOptionPane.showMessageDialog(contentPane, "Select an item to remove");
+					return;
+				}
 				remove();
 				refresh();
 			}
