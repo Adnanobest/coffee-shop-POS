@@ -97,7 +97,7 @@ public class POS extends JFrame {
 
 		setTotalPanel();
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 32; i++) {
 			addDrink("drink" + i, 6.5, "H C");
 			addDesserts("dessert " + i, 5.2);
 		}
@@ -237,7 +237,7 @@ public class POS extends JFrame {
 	}
 
 	private void setDrinksPane() {
-		drinksPanel.setLayout(new MigLayout("fill, insets 0", "", "[3%!]2[5%!]2[5%!]2[]"));
+		drinksPanel.setLayout(new MigLayout(" fill, insets 0", "", "[3%!]2[5%!]2[5%!]2[]"));
 		drinksPanel.setVisible(false);
 
 		btngrpHorC = new ButtonGroup();
@@ -319,7 +319,7 @@ public class POS extends JFrame {
 		});
 		drinksPanel.add(btnAddDrinkToCart, "cell 3 0 1 3, grow, gap 5 5 5 5");
 
-		drinkMenuPanel = new JPanel(new MigLayout("fill, ins 0 0 5 5, wrap 6", "[]", "[]"));
+		drinkMenuPanel = new JPanel(new MigLayout(" fill, ins 0 0 5 5, wrap 6", "[][][][][][]", "[::100]5"));
 		drinkScroll = new JScrollPane(drinkMenuPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
 				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		drinkScroll.addComponentListener(new ComponentAdapter() {
@@ -368,10 +368,12 @@ public class POS extends JFrame {
 
 	void resetDrinks() {
 		String h = Integer.toString(drinkScroll.getHeight() / 6);
-		((MigLayout) drinkMenuPanel.getLayout()).setRowConstraints(h + "!");
+		((MigLayout) drinkMenuPanel.getLayout()).setRowConstraints("[:"+ h + ": 150]:5:20");
 
 		drinkMenuPanel.removeAll();
 		drinkMenuPanel.repaint();
+		drinkMenuPanel.revalidate();
+		
 
 		if (drinkButtons.isEmpty()) {
 			return;
