@@ -29,7 +29,7 @@ public class LoginFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoginFrame frame = new LoginFrame(null, null);
+					LoginFrame frame = new LoginFrame(null, null, null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -40,18 +40,18 @@ public class LoginFrame extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param pos 
 	 * @param menu 
 	 */
-	public LoginFrame(ArrayList<Drink> menuDrink, ArrayList<Dessert> menuDessert) {
+	public LoginFrame(ArrayList<Drink> menuDrink, ArrayList<Dessert> menuDessert, POS pos) {
 		setResizable(false);
-		Admin admin = new Admin("", "");
+		Admin admin = new Admin("admin", "1234");
 		
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		//setExtendedState(JFrame.MAXIMIZED_BOTH);
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -75,17 +75,16 @@ public class LoginFrame extends JFrame {
 		textPassword.setColumns(10);
 		textPassword.setBounds(196, 77, 133, 20);
 		contentPane.add(textPassword);
-		//*
+		
 		JButton btnLogin = new JButton("Login");
 		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				String username = textUser.getText();
-				@SuppressWarnings("deprecation")
-				String password = textPassword.getText();
+				String password = new String(textPassword.getPassword());
 				
 				if(admin.username.equals(username)&&admin.password.equals(password)) {
-					ManagmentFrame managment = new ManagmentFrame(menuDrink, menuDessert);
+					ManagmentFrame managment = new ManagmentFrame(pos);
 					managment.setVisible(true);
 					dispose();
 				}

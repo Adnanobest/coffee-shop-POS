@@ -1,17 +1,17 @@
 package pack1;
 
 public class Menu {
-	public Menu(String name, double price) {
+	public Menu(String name, Double price) {
 		this.name = name;
 		this.price = price;
 	}
 	public String name;
-	private double price;
+	private Double price;
 	
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 }

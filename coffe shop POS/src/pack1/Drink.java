@@ -2,7 +2,7 @@ package pack1;
 
 public class Drink extends Menu {
 
-	int state;
+	public int state;
 	public Drink(String name, double price, String HorC) {
 
 		super(name, price);
