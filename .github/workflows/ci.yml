@@ -1,13 +1,10 @@
-name: Coffee POS Build
+name: Coffee POS CI
 
 on:
   push:
-    branches:
-      - master
-      - WIP
+    branches: [master, WIP]
   pull_request:
-    branches:
-      - master
+    branches: [master]
 
 jobs:
   build:
@@ -23,12 +20,13 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Compile project
+      - name: Find and compile Java files
         run: |
           mkdir -p bin
-          find . -name "*.java" > sources.txt
+          find . -type f -name "*.java" > sources.txt
+          echo "Java files found:"
           cat sources.txt
           javac -d bin @sources.txt
 
-      - name: Verify build output
+      - name: Show build output
         run: ls -R bin
