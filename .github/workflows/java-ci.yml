@@ -1,0 +1,59 @@
+name: Coffee Shop POS CI/CD
+
+on:
+  push:
+    branches:
+      - master
+      - WIP
+  pull_request:
+    branches:
+      - master
+      - WIP
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Create bin directory
+        run: mkdir -p bin
+
+      - name: Verify project structure
+        run: |
+          echo "Listing Java files..."
+          find . -name "*.java"
+
+      - name: Download MigLayout Library
+        run: |
+          mkdir -p lib
+          curl -L https://repo1.maven.org/maven2/com/miglayout/miglayout-swing/11.4.2/miglayout-swing-11.4.2.jar -o lib/miglayout-swing-11.4.2.jar
+          curl -L https://repo1.maven.org/maven2/com/miglayout/miglayout-core/11.4.2/miglayout-core-11.4.2.jar -o lib/miglayout-core-11.4.2.jar
+
+      - name: Compile Java Source
+        run: |
+          find . -name "*.java" > sources.txt
+          javac \
+            -encoding UTF-8 \
+            --release 21 \
+            -cp "lib/*" \
+            -d bin \
+            @sources.txt
+
+      - name: Create JAR File
+        run: |
+          jar cfe coffee-shop-pos.jar pack1.POS -C bin .
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coffee-shop-pos
+          path: coffee-shop-pos.jar
