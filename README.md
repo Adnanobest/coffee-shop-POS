@@ -5,6 +5,7 @@ This application allows staff to manage drinks and desserts, process customer or
 
 ---
 
+ 
 ##  Features
 
 ###  Customer Side (POS Interface)
