@@ -74,6 +74,17 @@ Coffee POS System/
   - `ManagmentFrame` → Menu control (CRUD operations)
 
 ---
+### Database Schema
+
+| Table Name | Purpose |
+|------------|---------|
+| `admin` | Stores admin login information |
+| `drinks` | Stores drink menu items and prices |
+| `desserts` | Stores dessert menu items and prices |
+| `orders` | Stores customer order totals |
+| `order_items` | Stores individual items inside each order |
+
+---
 
 ##  Technologies Used
 
@@ -89,44 +100,83 @@ Coffee POS System/
 
 ## How to Run
 
-###  Requirements
-- Java JDK 21 or higher
-- IDE (Eclipse, IntelliJ IDEA, or VS Code)
-- MigLayout libraries:
-  - `miglayout-core-11.4.2.jar`
-  - `miglayout-swing-11.4.2.jar`
+### Requirements
+- Java JDK 21+
+- MySQL Server
+- IntelliJ IDEA / Eclipse
+- MigLayout `.jar` files
+- MySQL Connector/J `.jar`
 
 ---
 
-###  Steps to Run the Application
+## Steps
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/coffee-pos-system.git
-   cd coffee-pos-system
-2. **Open the project in your IDE**
-3. **Add external libraries**
-Add the following 
-- .jar files to your project:
-  - -miglayout-core-11.4.2.jar
-  - miglayout-swing-11.4.2.jar
-- In most IDEs:
-  - Right-click project → Add Libraries / Dependencies
-4. **Build the project**
-- Ensure all files compile without errors
-5. **Run the application**
+### 1. Clone the project
+```bash
+git clone https://github.com/your-username/coffee-pos-system.git
+cd coffee-pos-system
+```
+
+### 2. Create the database
+Run in MySQL:
+
+```sql
+CREATE DATABASE coffee_shop_pos;
+```
+
+Then run the table queries from the Database Schema section.
+
+---
+
+### 3. Check MySQL connection
+Make sure MySQL is running on:
+
+```text
+localhost:3306
+```
+
+Database connection file:
+
+```text
+src/pack1/DBcon.java
+```
+
+Connection used:
+
+```java
+jdbc:mysql://localhost:3306/coffee_shop_pos
+```
+
+---
+
+### 4. Add libraries
+Add these `.jar` files to the project:
+
+```text
+miglayout-core-11.4.2.jar
+miglayout-swing-11.4.2.jar
+mysql-connector-j-x.x.x.jar
+```
+
+---
+
+### 5. Run the project
+Run:
+
 ```bash
 pack1.POS
 ```
 
 
-**Access Admin Panel**
-- Click the Admin button in the application
-- Login using:
-```bash
+---
+
+## Admin Login
+
+```text
 Username: admin
 Password: 1234
 ```
+---
 ##  Team & Roles
 
 | Member Name | Role | Responsibilities |
