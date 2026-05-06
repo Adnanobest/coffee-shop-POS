@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - WIP
+
   pull_request:
     branches:
       - master
@@ -27,32 +28,32 @@ jobs:
       - name: Create bin directory
         run: mkdir -p bin
 
-      - name: Verify project structure
-        run: |
-          echo "Listing Java files..."
-          find . -name "*.java"
-
-      - name: Download MigLayout Library
+      - name: Download MigLayout Libraries
         run: |
           mkdir -p lib
-          curl -L https://repo1.maven.org/maven2/com/miglayout/miglayout-swing/11.4.2/miglayout-swing-11.4.2.jar -o lib/miglayout-swing-11.4.2.jar
-          curl -L https://repo1.maven.org/maven2/com/miglayout/miglayout-core/11.4.2/miglayout-core-11.4.2.jar -o lib/miglayout-core-11.4.2.jar
+
+          curl -L https://repo1.maven.org/maven2/com/miglayout/miglayout-swing/11.4.2/miglayout-swing-11.4.2.jar \
+            -o lib/miglayout-swing-11.4.2.jar
+
+          curl -L https://repo1.maven.org/maven2/com/miglayout/miglayout-core/11.4.2/miglayout-core-11.4.2.jar \
+            -o lib/miglayout-core-11.4.2.jar
+
+      - name: Show Java Files
+        run: find . -name "*.java"
 
       - name: Compile Java Source
         run: |
-          find . -name "*.java" > sources.txt
-          javac \
+          find . -name "*.java" -print0 | xargs -0 javac \
             -encoding UTF-8 \
             --release 21 \
             -cp "lib/*" \
-            -d bin \
-            @sources.txt
+            -d bin
 
-      - name: Create JAR File
+      - name: Create JAR
         run: |
           jar cfe coffee-shop-pos.jar pack1.POS -C bin .
 
-      - name: Upload Build Artifact
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: coffee-shop-pos
