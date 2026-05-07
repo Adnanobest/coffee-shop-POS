@@ -99,6 +99,11 @@ Coffee POS System/
 ---
 
 ###  Steps to Run the Application
+1. **Download the CoffeeShopPOS.jar file**<a href="https://github.com/Adnanobest/coffee-shop-POS/blob/master/coffe%20shop%20POS/CoffeeShopPOS.jar">download</a>
+
+2. **Double click on CoffeeShopPOS.jar to run the application**
+
+**Or follow the following to build the project yourself**
 
 1. **Clone the repository**
    ```bash
