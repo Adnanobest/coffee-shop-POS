@@ -2,7 +2,6 @@ package pack1;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,21 +38,11 @@ public class ManagmentFrame extends JFrame {
 	JPanel addDessertPanel;
 	JPanel listPanel;
 	POS pos;
-
+	DBcon con = new DBcon();
+	
 	Font font = new Font("Tahoma", Font.PLAIN, 13);
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ManagmentFrame frame = new ManagmentFrame(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 
 	public ManagmentFrame(POS pos) {
 		this.pos=pos;
@@ -101,12 +90,12 @@ public class ManagmentFrame extends JFrame {
 		if (!drinks.isEmpty() || !desserts.isEmpty()) {
 			listModel.clear();
 			listModel.addElement("Drinks:");
-			for (Drink x : drinks) {
-				listModel.addElement(x.name + ", price: " + x.getPrice());
+			for (Drink drink : drinks) {
+				listModel.addElement(drink.name + ", price: " + drink.getPrice());
 			}
 			listModel.addElement("Desserts:");
-			for (Dessert x : desserts) {
-				listModel.addElement(x.name + ", price: " + x.getPrice());
+			for (Dessert dessert : desserts) {
+				listModel.addElement(dessert.name + ", price: " + dessert.getPrice());
 			}
 			list.setModel(listModel);
 		}
@@ -226,7 +215,7 @@ public class ManagmentFrame extends JFrame {
 		btnSaveDrink.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtDrinkName.getText().equals("")) {
-					if (pos.isNum(txtDrinkPrice.getText())) {
+					if (pos.isNum(txtDrinkPrice.getText(), contentPane)) {
 						if (chckbxHot.isSelected() || chckbxCold.isSelected()) {
 							String name = txtDrinkName.getText();
 							Double price = Double.parseDouble(txtDrinkPrice.getText());
@@ -238,6 +227,7 @@ public class ManagmentFrame extends JFrame {
 								horc += "C";
 							}
 
+							con.addDrink(new Drink(name, price, horc));
 							pos.addDrink(name, price, horc);
 							JOptionPane.showMessageDialog(contentPane,
 									drinks.getLast().name + " Saved with price "
@@ -287,12 +277,13 @@ public class ManagmentFrame extends JFrame {
 		btnSaveDessert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (!txtDessertName.getText().equals("")) {
-					if (pos.isNum(txtDessertPrice.getText())) {
+					if (pos.isNum(txtDessertPrice.getText(), contentPane)) {
 						int exist = alreadyExists(txtDessertName.getText());
 						switch (exist) {
 						case 0:
 							String name = txtDessertName.getText();
 							Double price = Double.parseDouble(txtDessertPrice.getText());
+							con.addDessert(new Dessert(name, price));
 							pos.addDesserts(name, price);
 							JOptionPane.showMessageDialog(contentPane, name + " Saved with price " + price);
 							refresh();
@@ -336,6 +327,7 @@ public class ManagmentFrame extends JFrame {
 				for (Drink x : drinks) {
 					if (x.name.equals(list.getSelectedValue().split(",")[0])) {
 						JOptionPane.showMessageDialog(contentPane, list.getSelectedValue() + " deleted");
+						con.removeDrink(list.getSelectedValue().split(",")[0]);
 						drinks.remove(x);
 						pos.removeButton(list.getSelectedValue().split(",")[0], 0);
 						pos.resetDrinks();
@@ -346,6 +338,7 @@ public class ManagmentFrame extends JFrame {
 				for (Dessert x : desserts) {
 					if (x.name.equals(list.getSelectedValue().split(",")[0])) {
 						JOptionPane.showMessageDialog(contentPane, list.getSelectedValue() + " deleted");
+						con.removeDessert(list.getSelectedValue().split(",")[0]);
 						desserts.remove(x);
 						pos.removeButton(list.getSelectedValue().split(",")[0], 1);
 						pos.resetDesserts();
@@ -363,13 +356,14 @@ public class ManagmentFrame extends JFrame {
 			} else {
 				String selected = list.getSelectedValue().split(",")[0];
 				String str = JOptionPane.showInputDialog(contentPane, "enter new price for " + selected);
-				while (!pos.isNum(str)) {
+				while (!pos.isNum(str, contentPane)) {
 					str = JOptionPane.showInputDialog(contentPane, "enter new price for " + selected);
 				}
 				double newPrice = Double.parseDouble(str);
 				if (list.getSelectedIndex() <= drinks.size()) {
 					for (Drink x : drinks) {
 						if (x.name.equals(selected)) {
+							con.updatePrice(selected, newPrice);
 							x.setPrice(newPrice);
 							JOptionPane.showMessageDialog(contentPane, selected + "'s price changed to" + x.getPrice());
 							refresh();
@@ -379,6 +373,7 @@ public class ManagmentFrame extends JFrame {
 				} else {
 					for (Dessert x : desserts) {
 						if (x.name.equals(selected)) {
+							con.updatePrice(selected, newPrice);
 							x.setPrice(newPrice);
 							JOptionPane.showMessageDialog(contentPane, selected + "'s price changed to" + x.getPrice());
 							refresh();

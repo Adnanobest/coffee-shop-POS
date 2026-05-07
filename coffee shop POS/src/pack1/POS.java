@@ -54,6 +54,7 @@ public class POS extends JFrame {
 	private DefaultListModel<String> listModel = new DefaultListModel<>();
 	private DecimalFormat df = new DecimalFormat("#.##");
 	private Font font = new Font("Tahoma", Font.PLAIN, 13);
+	DBcon con = new DBcon();
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -91,16 +92,13 @@ public class POS extends JFrame {
 
 		setPanel(this);
 
-		setDrinksPane();
+		setDrinksPanel();
 
 		setDessertPanel();
 
 		setTotalPanel();
-
-		for (int i = 0; i < 32; i++) {
-			addDrink("drink" + i, 6.5, "H C");
-			addDesserts("dessert " + i, 5.2);
-		}
+		
+		initMenuFromDB();
 	}
 
 	double drinkSize() {
@@ -200,7 +198,7 @@ public class POS extends JFrame {
 				}
 				
 				String enteredAmount = JOptionPane.showInputDialog(contentPane, "Enter the paid amount: ");
-				if(isNum(enteredAmount)) {
+				if(isNum(enteredAmount, contentPane)) {
 					double paid = Double.parseDouble(enteredAmount);
 					if (paid < total) {
 						JOptionPane.showMessageDialog(contentPane, "Paid amount is less than the total");
@@ -236,7 +234,7 @@ public class POS extends JFrame {
 
 	}
 
-	private void setDrinksPane() {
+	private void setDrinksPanel() {
 		drinksPanel.setLayout(new MigLayout(" fill, insets 0", "", "[3%!]2[5%!]2[5%!]2[]"));
 		drinksPanel.setVisible(false);
 
@@ -331,7 +329,8 @@ public class POS extends JFrame {
 		drinkScroll.getVerticalScrollBar().setUnitIncrement(16);
 
 		drinksPanel.add(drinkScroll, "cell 0 3 4 1, grow");
-
+		
+		resetDrinks();
 	}
 
 	void addDrink(String name, Double price, String horc) {
@@ -405,13 +404,16 @@ public class POS extends JFrame {
 
 		JLabel lblDessert = new JLabel("Click on   the selected dessert");
 		dessertScroll.setColumnHeaderView(lblDessert);
+		
+		resetDesserts();
 	}
 
 	void addDesserts(String name, Double price) {
-		desserts.add(new Dessert(name, price));
+		Dessert dessert = new Dessert(name, price);
+		desserts.add(dessert);
 
-		JButton dessert = new JButton(name);
-		dessert.addActionListener(new ActionListener() {
+		JButton btnDessert = new JButton(name);
+		btnDessert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listModel.addElement(name + ", " + df.format(price));
 				total += price;
@@ -421,7 +423,7 @@ public class POS extends JFrame {
 			}
 		});
 
-		dessertButtons.add(dessert);
+		dessertButtons.add(btnDessert);
 		resetDesserts();
 	}
 
@@ -435,6 +437,7 @@ public class POS extends JFrame {
 		if (dessertButtons.isEmpty()) {
 			return;
 		}
+		
 		int i = 0;
 		for (JButton button : dessertButtons) {
 			button.setToolTipText(desserts.get(i++).getPrice().toString());
@@ -442,22 +445,22 @@ public class POS extends JFrame {
 		}
 	}
 	
-	public boolean isNum(String str) {
+	public boolean isNum(String str, JPanel panel) {
 		int dot = 0;
 		
 		if(str.isEmpty()) {
-			JOptionPane.showMessageDialog(contentPane, "You must enter a number for the price");
+			JOptionPane.showMessageDialog(panel, "You must enter a number for the price");
 			return false;
 		}
 		else if(str.equals(".")) {
-			JOptionPane.showMessageDialog(contentPane, "price can only be a number");
+			JOptionPane.showMessageDialog(panel, "price can only be a number");
 			return false;
 		}
 		else {
 			for (char x : str.toCharArray()) {
 				if (x == '.') {
 					if (++dot > 1) {
-						JOptionPane.showMessageDialog(contentPane, "price can only be a number");
+						JOptionPane.showMessageDialog(panel, "price can only be a number");
 						return false;
 					}
 				} else if (x - '0' < 0 || x - '0' > 9) {
@@ -466,6 +469,30 @@ public class POS extends JFrame {
 				}
 			}
 			return true;
+		}
+	}
+
+	public void initMenuFromDB() {
+		ArrayList<Drink> dbDrinks = con.getDrinks();
+		
+		for (Drink drink : dbDrinks) {
+			String HorC = "";
+			
+			if (drink.state == 0) {
+				HorC = "H C";
+			} else if (drink.state == 1) {
+				HorC = "H";
+			} else if (drink.state == 2) {
+				HorC = "C";
+			}
+			
+			addDrink(drink.name, drink.getPrice(), HorC);
+		}
+		
+		ArrayList<Dessert> dbDesserts = con.getDesserts();
+		
+		for (Dessert dessert : dbDesserts) {
+			addDesserts(dessert.name, dessert.getPrice());
 		}
 	}
 }

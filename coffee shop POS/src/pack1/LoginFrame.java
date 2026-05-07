@@ -1,6 +1,5 @@
 package pack1;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -21,31 +20,13 @@ public class LoginFrame extends JFrame {
 	private JPanel contentPane;
 	private JTextField textUser;
 	private JPasswordField textPassword;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginFrame frame = new LoginFrame(null, null, null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 * @param pos 
-	 * @param menu 
-	 */
+	private ArrayList<Admin> admins = new ArrayList<Admin>(0);
+	private DBcon con = new DBcon();
+	
 	public LoginFrame(ArrayList<Drink> menuDrink, ArrayList<Dessert> menuDessert, POS pos) {
+		admins = con.getAdmins();
+		
 		setResizable(false);
-		Admin admin = new Admin("admin", "1234");
 		
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -83,16 +64,16 @@ public class LoginFrame extends JFrame {
 				String username = textUser.getText();
 				String password = new String(textPassword.getPassword());
 				
-				if(admin.username.equals(username)&&admin.password.equals(password)) {
-					ManagmentFrame managment = new ManagmentFrame(pos);
-					managment.setVisible(true);
-					dispose();
+				for (Admin admin : admins) {
+					if(admin.username.equals(username)&&admin.password.equals(password)) {
+						ManagmentFrame managment = new ManagmentFrame(pos);
+						managment.setVisible(true);
+						dispose();
+					}
 				}
-				else {
-					JOptionPane.showMessageDialog(contentPane, "Login Failed!");
-					textUser.setText("");
-					textPassword.setText("");
-				}
+				JOptionPane.showMessageDialog(contentPane, "Login Failed!");
+				textUser.setText("");
+				textPassword.setText("");
 			}
 		});
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -108,6 +89,28 @@ public class LoginFrame extends JFrame {
 		btnBack.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnBack.setBounds(172, 191, 85, 21);
 		contentPane.add(btnBack);
-		
+//		
+//		JButton btnManageUsers = new JButton("<html>Manage\nUsers");
+//		btnManageUsers.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				String username = textUser.getText();
+//				String password = new String(textPassword.getPassword());
+//				
+//				if(manager.username.equals(username) && manager.password.equals(password)) {
+//					ManagmentFrame managment = new ManagmentFrame(pos);
+//					managment.setVisible(true);
+//					dispose();
+//				}
+//				else {
+//					JOptionPane.showMessageDialog(contentPane, "Login Failed!");
+//					textUser.setText("");
+//					textPassword.setText("");
+//				}
+//			}
+//		});
+//		btnManageUsers.setFont(new Font("Tahoma", Font.PLAIN, 12));
+//		btnManageUsers.setBounds(172, 222, 85, 28);
+//		contentPane.add(btnManageUsers);
 	}
+
 }
