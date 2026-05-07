@@ -64,16 +64,21 @@ public class LoginFrame extends JFrame {
 				String username = textUser.getText();
 				String password = new String(textPassword.getPassword());
 				
+				Boolean found = false;
 				for (Admin admin : admins) {
-					if(admin.username.equals(username)&&admin.password.equals(password)) {
+					if(admin.username.equals(username) && admin.password.equals(password)) {
 						ManagmentFrame managment = new ManagmentFrame(pos);
 						managment.setVisible(true);
 						dispose();
+						found = true;
 					}
 				}
-				JOptionPane.showMessageDialog(contentPane, "Login Failed!");
-				textUser.setText("");
-				textPassword.setText("");
+				
+				if (found == false) {
+					JOptionPane.showMessageDialog(contentPane, "Login Failed!");
+					textUser.setText("");
+					textPassword.setText("");
+				}
 			}
 		});
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 15));
